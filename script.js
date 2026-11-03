@@ -131,6 +131,7 @@ const translations = {
     "products.cat.arms": "Robotic Arms",
     "products.cat.effectors": "End Effectors & Modules",
     "products.cat.app": "AgriAI App",
+    "products.taobaoShortcut": "Taobao Store",
 
     "robots.title": "Multi-functional smart agricultural robots",
     "robots.intro":
@@ -213,6 +214,7 @@ const translations = {
     "effectors.intro":
       "Our self-developed tools fit COONEO robots and arms, covering tillage, seeding, monitoring, weeding, pruning and picking.",
     "effectors.imageAlt": "COONEO robotic arms and end effectors",
+    "effectors.imageSrc": "Assets/Images/products/end-effectors.jpg",
     "effectors.soft.title": "Soft Grippers (2- / 3-finger)",
     "effectors.soft.desc": "Soft, bionic materials wrap around produce for damage-free picking of flowers, fruit and vegetables.",
     "effectors.rigid.title": "3-Finger Rigid Gripper",
@@ -244,11 +246,11 @@ const translations = {
     "contact.email": "Email",
     "contact.phone": "Phone",
     "contact.website": "Website",
-    "contact.address": "Address",
-    "contact.addressValue": "Shenzhen, China [full address TBC]",
+    "contact.address": "Company",
+    "contact.addressValue": "COONEO Innovation Technology (Shenzhen) Co., Ltd.",
     "contact.direct": "Prefer to chat directly?",
     "contact.whatsapp": "Chat on WhatsApp",
-    "contact.wechat": "Add us on WeChat",
+    "contact.wechat": "Follow us on WeChat",
     "contact.workTitle": "Ways to work with us",
     "contact.work1": "Robot purchase & custom development",
     "contact.work2": "Robot farm co-building",
@@ -284,15 +286,16 @@ const translations = {
     "form.errMessage": "Please write at least 10 characters.",
     "form.success": "Thank you! Your enquiry has been received. We'll be in touch soon.",
 
-    "modal.title": "Scan to add us on WeChat",
-    "modal.qr": "WeChat QR code",
-    "modal.id": "WeChat ID: [TBC]",
+    "modal.title": "Scan to follow us on WeChat",
+    "modal.qr": "COONEO WeChat Official Account QR code",
+    "modal.id": "Follow our WeChat Official Account for the latest news.",
     "modal.close": "Close",
 
     /* ---------- Footer ---------- */
     "footer.tagline": "AI-powered agricultural robots for smart farming.",
     "footer.quickLinks": "Quick Links",
     "footer.shopee": "Our Shopee Store",
+    "footer.taobao": "Our Taobao Store",
     "footer.contact": "Contact",
     "footer.follow": "Follow Us",
     "footer.company": "COONEO Innovation Technology (Shenzhen) Co., Ltd.",
@@ -399,6 +402,7 @@ const translations = {
     "products.cat.arms": "机械臂",
     "products.cat.effectors": "末端执行器与功能模块",
     "products.cat.app": "AgriAI 应用",
+    "products.taobaoShortcut": "淘宝店铺",
 
     "robots.title": "多功能智能农业机器人",
     "robots.intro":
@@ -477,6 +481,7 @@ const translations = {
     "effectors.title": "自研配套零部件，覆盖各类农事作业",
     "effectors.intro": "适配酷牛机器人与机械臂，覆盖自动耕作、精准播种、农业监测、智能除草、枝条修剪及花果蔬采摘等场景。",
     "effectors.imageAlt": "酷牛机械臂与末端执行器",
+    "effectors.imageSrc": "Assets/Images/products/end-effectors-zh.jpg",
     "effectors.soft.title": "柔性机械爪（二指 / 三指）",
     "effectors.soft.desc": "仿生柔性材料贴合果实表面，实现花、果、蔬的无损采摘。",
     "effectors.rigid.title": "三指刚性机械爪",
@@ -507,11 +512,11 @@ const translations = {
     "contact.email": "邮箱",
     "contact.phone": "电话",
     "contact.website": "官网",
-    "contact.address": "地址",
-    "contact.addressValue": "中国深圳 [详细地址待确认]",
+    "contact.address": "公司",
+    "contact.addressValue": "酷牛创新技术（深圳）有限公司",
     "contact.direct": "想直接沟通？",
     "contact.whatsapp": "WhatsApp 联系",
-    "contact.wechat": "添加微信",
+    "contact.wechat": "关注微信公众号",
     "contact.workTitle": "合作方式",
     "contact.work1": "机器人采购 & 定制开发",
     "contact.work2": "机器人农场共建",
@@ -547,15 +552,16 @@ const translations = {
     "form.errMessage": "请至少输入 10 个字符。",
     "form.success": "感谢您的咨询！我们已收到您的信息，会尽快与您联系。",
 
-    "modal.title": "扫码添加微信",
-    "modal.qr": "微信二维码",
-    "modal.id": "微信号：[待确认]",
+    "modal.title": "扫码关注微信公众号",
+    "modal.qr": "酷牛微信公众号二维码",
+    "modal.id": "关注我们，了解更多公司最新动态",
     "modal.close": "关闭",
 
     /* ---------- 页脚 ---------- */
     "footer.tagline": "AI 驱动的智慧农业机器人。",
     "footer.quickLinks": "快速链接",
     "footer.shopee": "Shopee 官方店铺",
+    "footer.taobao": "淘宝官方店铺",
     "footer.contact": "联系方式",
     "footer.follow": "关注我们",
     "footer.company": "酷牛创新技术（深圳）有限公司",
@@ -591,6 +597,12 @@ function setLanguage(lang) {
   // Input placeholders
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+
+  // Images that have a different version per language (e.g. labelled diagrams)
+  document.querySelectorAll("[data-i18n-src]").forEach((el) => {
+    const src = t(el.dataset.i18nSrc);
+    if (src && el.getAttribute("src") !== src) el.src = src;
   });
 
   // Image descriptions (alt text)
