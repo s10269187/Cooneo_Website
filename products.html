@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<!--
+  COONEO 酷牛 — PRODUCTS PAGE
+  Text lives in script.js (translations object). Product info comes from
+  the COONEO product brochure (酷牛产品册0907.pdf) and the EN company deck.
+  Spec values that are pure numbers (mm, kg, m/s) are written directly here.
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="meta.products.title">Products | COONEO</title>
+    <meta
+      name="description"
+      data-i18n-content="meta.products.description"
+      content="COONEO agricultural robots (RoboOX, RoboOX mini, Stier, Bison, Autonomous Transport Robot), robotic arms, end effectors and the AgriAI app."
+    />
+    <link rel="icon" type="image/png" href="Assets/Images/logo/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- HEADER (same on every page) -->
+    <header class="site-header" id="site-header">
+      <div class="container nav">
+        <a href="index.html" class="brand">
+          <img class="brand-logo" src="Assets/Images/logo/cooneo-lockup-black.png" alt="COONEO" width="141" height="40" />
+          <span class="brand-cn">酷牛</span>
+        </a>
+        <nav class="nav-links" id="nav-links" aria-label="Main navigation">
+          <a href="index.html" data-i18n="nav.home">Home</a>
+          <a href="products.html" aria-current="page" data-i18n="nav.products">Products</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact Us</a>
+        </nav>
+        <div class="nav-actions">
+          <label class="lang-switch">
+            <span class="visually-hidden" data-i18n="nav.language">Language</span>
+            <select id="lang-select">
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+            </select>
+          </label>
+          <button class="menu-toggle" id="menu-toggle" aria-controls="nav-links" aria-expanded="false" data-i18n-aria-label="nav.menu" aria-label="Open menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- PAGE BANNER -->
+      <section class="page-banner">
+        <div class="container">
+          <p class="eyebrow eyebrow-light" data-i18n="products.eyebrow">Products</p>
+          <h1 data-i18n="products.title">Our Products</h1>
+          <p class="lead" data-i18n="products.intro">From complete robot platforms to core components and AI software.</p>
+          <!-- Jump links to sections on this page -->
+          <nav class="jump-nav" aria-label="Product categories">
+            <a href="#agri-robots" data-i18n="products.cat.robots">Agricultural Robots</a>
+            <a href="#robotic-arms" data-i18n="products.cat.arms">Robotic Arms</a>
+            <a href="#end-effectors" data-i18n="products.cat.effectors">End Effectors &amp; Modules</a>
+            <a href="#agriai" data-i18n="products.cat.app">AgriAI App</a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           1. AGRICULTURAL ROBOTS
+           ========================================================= -->
+      <section class="section" id="agri-robots">
+        <div class="container">
+          <div class="section-head fade-in">
+            <p class="eyebrow" data-i18n="products.cat.robots">Agricultural Robots</p>
+            <h2 data-i18n="robots.title">Multi-functional smart agricultural robots</h2>
+            <p class="section-intro" data-i18n="robots.intro">Modular, compact robot platforms.</p>
+          </div>
+
+          <!-- RoboOX -->
+          <article class="product-row fade-in" id="roboox">
+            <div class="product-media">
+              <img src="Assets/Images/products/roboox.jpg" alt="RoboOX" loading="lazy" width="1200" height="763" />
+            </div>
+            <div class="product-info">
+              <p class="product-kicker" data-i18n="roboox.kicker">Tillage / Harvesting Multi-Function Robot</p>
+              <h3>RoboOX</h3>
+              <p data-i18n="roboox.desc">A high-payload, four-wheel-drive autonomous farm robot.</p>
+              <p class="product-meta"><strong data-i18n="label.modules">Compatible modules:</strong> <span data-i18n="roboox.modules">Soil preparation system, serial/parallel arms, rigid/soft picking grippers</span></p>
+              <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="roboox.apps">Soil preparation, heavy material transport, smart harvesting</span></p>
+              <dl class="spec-table">
+                <div><dt data-i18n="spec.size">Dimensions</dt><dd>749 × 1016 × 590 mm</dd></div>
+                <div><dt data-i18n="spec.speed">Max. speed</dt><dd>2 m/s</dd></div>
+                <div><dt data-i18n="spec.drive">Drive</dt><dd data-i18n="roboox.drive">4-wheel differential</dd></div>
+                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="roboox.power">48 V battery</dd></div>
+                <div><dt data-i18n="spec.nav">Navigation</dt><dd data-i18n="spec.navValue">GPS / RTK / vision</dd></div>
+                <div><dt data-i18n="spec.comms">Communication</dt><dd>WiFi / 4G / 5G</dd></div>
+              </dl>
+              <div class="product-actions">
+                <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
+                <!-- TODO: spec sheet PDF link -->
+                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- RoboOX mini -->
+          <article class="product-row product-row-reverse fade-in" id="roboox-mini">
+            <div class="product-media">
+              <img src="Assets/Images/products/roboox-mini.jpg" alt="RoboOX mini" loading="lazy" width="1200" height="763" />
+            </div>
+            <div class="product-info">
+              <p class="product-kicker" data-i18n="mini.kicker">Precision Multi-Functional Agricultural Robot</p>
+              <h3>RoboOX mini</h3>
+              <p data-i18n="mini.desc">A compact, precise multi-functional agricultural robot.</p>
+              <p class="product-meta"><strong data-i18n="label.modules">Compatible modules:</strong> <span data-i18n="mini.modules">Soil preparation, seeding system, laser weeder, arms, grippers</span></p>
+              <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="mini.apps">Soil preparation, seeding, weeding, harvesting</span></p>
+              <dl class="spec-table">
+                <div><dt data-i18n="spec.size">Dimensions</dt><dd>725 × 815 × 618 mm</dd></div>
+                <div><dt data-i18n="spec.speed">Max. speed</dt><dd>2 m/s</dd></div>
+                <div><dt data-i18n="spec.drive">Drive</dt><dd data-i18n="mini.drive">Differential, hub motors</dd></div>
+                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="mini.power">36 V lithium battery</dd></div>
+                <div><dt data-i18n="spec.nav">Navigation</dt><dd data-i18n="spec.navValue">GPS / RTK / vision</dd></div>
+                <div><dt data-i18n="spec.comms">Communication</dt><dd>WiFi / 4G / 5G</dd></div>
+              </dl>
+              <div class="product-actions">
+                <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
+                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Stier -->
+          <article class="product-row fade-in" id="stier">
+            <div class="product-media">
+              <img src="Assets/Images/products/stier.jpg" alt="Stier" loading="lazy" width="1200" height="763" />
+            </div>
+            <div class="product-info">
+              <p class="product-kicker" data-i18n="stier.kicker">Monitoring / Pruning / Picking Robot</p>
+              <h3>Stier</h3>
+              <p data-i18n="stier.desc">The most compact robot in the range.</p>
+              <p class="product-meta"><strong data-i18n="label.modules">Compatible modules:</strong> <span data-i18n="stier.modules">Serial/parallel arms, rigid/soft picking grippers</span></p>
+              <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="stier.apps">Close-range monitoring, pruning, picking</span></p>
+              <dl class="spec-table">
+                <div><dt data-i18n="spec.size">Dimensions</dt><dd>667 × 650 × 296 mm</dd></div>
+                <div><dt data-i18n="spec.weight">Weight</dt><dd>30 kg</dd></div>
+                <div><dt data-i18n="spec.payload">Max. payload</dt><dd>50 kg</dd></div>
+                <div><dt data-i18n="spec.slope">Max. slope</dt><dd>30°</dd></div>
+                <div><dt data-i18n="spec.speed">Max. speed</dt><dd>2 m/s</dd></div>
+                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="stier.power">36 V lithium battery</dd></div>
+              </dl>
+              <div class="product-actions">
+                <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
+                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bison -->
+          <article class="product-row product-row-reverse fade-in" id="bison">
+            <div class="product-media">
+              <img src="Assets/Images/products/bison.jpg" alt="Bison" loading="lazy" width="1200" height="763" />
+            </div>
+            <div class="product-info">
+              <p class="product-kicker" data-i18n="bison.kicker">Tracked Robot</p>
+              <h3>Bison</h3>
+              <p data-i18n="bison.desc">A modular, lightweight tracked robot.</p>
+              <p class="product-meta"><strong data-i18n="label.modules">Compatible modules:</strong> <span data-i18n="bison.modules">Serial/parallel arms, grippers, crop-protection spray boom</span></p>
+              <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="bison.apps">Inspection, crop protection, transport, picking</span></p>
+              <dl class="spec-table">
+                <div><dt data-i18n="spec.size">Dimensions</dt><dd>630 × 556 × 240 mm</dd></div>
+                <div><dt data-i18n="spec.weight">Weight</dt><dd>35 kg</dd></div>
+                <div><dt data-i18n="spec.payload">Max. payload</dt><dd>50 kg</dd></div>
+                <div><dt data-i18n="spec.slope">Max. slope</dt><dd>45°</dd></div>
+                <div><dt data-i18n="spec.speed">Max. speed</dt><dd>2 m/s</dd></div>
+                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="bison.power">24 V lithium battery</dd></div>
+              </dl>
+              <div class="product-actions">
+                <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
+                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Autonomous Transport Robot -->
+          <article class="product-row fade-in" id="transport">
+            <div class="product-media">
+              <img src="Assets/Images/products/transport-robot.jpg" alt="" loading="lazy" width="1200" height="763" />
+            </div>
+            <div class="product-info">
+              <p class="product-kicker" data-i18n="transport.kicker">Smart Transport</p>
+              <h3 data-i18n="transport.name">Autonomous Transport Robot</h3>
+              <p data-i18n="transport.desc">A compact, agile transport robot.</p>
+              <ul class="check-list">
+                <li data-i18n="transport.f1">Plans its own routes — no tracks or rails needed</li>
+                <li data-i18n="transport.f2">Turns on the spot and fits into lifts and narrow spaces</li>
+                <li data-i18n="transport.f3">Auto-follow with obstacle avoidance</li>
+                <li data-i18n="transport.f4">Climbs slopes of up to 45°</li>
+              </ul>
+              <div class="mode-chips">
+                <span data-i18n="transport.m1">Remote control</span>
+                <span data-i18n="transport.m2">Auto-follow</span>
+                <span data-i18n="transport.m3">Autonomous driving</span>
+              </div>
+              <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="transport.apps">Harvest-season produce transport, park logistics</span></p>
+              <div class="product-actions">
+                <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
+                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           2. ROBOTIC ARMS (standard products — sold online)
+           ========================================================= -->
+      <section class="section section-tinted" id="robotic-arms">
+        <div class="container">
+          <div class="section-head fade-in">
+            <p class="eyebrow" data-i18n="products.cat.arms">Robotic Arms</p>
+            <h2 data-i18n="arms.title">Robotic arms for makers, classrooms and labs</h2>
+            <p class="section-intro" data-i18n="arms.intro">Ready to use and open for secondary development.</p>
+          </div>
+
+          <div class="card-grid card-grid-2">
+            <article class="card fade-in">
+              <img class="card-img card-img-dark" src="Assets/Images/products/serial-arm.jpg" alt="" loading="lazy" width="1200" height="763" />
+              <div class="card-body">
+                <h3 data-i18n="serial.name">COONEO Serial Robotic Arm</h3>
+                <p data-i18n="serial.desc">Plug-and-play and open for secondary development.</p>
+                <ul class="spec-list">
+                  <li data-i18n="serial.s1">Compatible with STM32, ESP32 and Raspberry Pi controllers</li>
+                  <li data-i18n="serial.s2">Supports ROS / ROS2</li>
+                  <li data-i18n="serial.s3">Choice of high-torque servo options</li>
+                  <li data-i18n="serial.s4">Highly extensible structure</li>
+                </ul>
+                <div class="card-actions">
+                  <!-- SHOPEE: when the store is ready, put this line back (with the product link) and remove the Enquire Now line:
+                  <a class="btn btn-shopee btn-sm" href="#" target="_blank" rel="noopener" data-i18n="btn.shopee">Buy on Shopee</a> -->
+                  <a class="btn btn-primary btn-sm" href="contact.html?interest=robotic-arms" data-i18n="btn.enquire">Enquire Now</a>
+                  <!-- TODO: spec sheet PDF link -->
+                  <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="card fade-in">
+              <img class="card-img card-img-dark" src="Assets/Images/products/parallel-arm.jpg" alt="" loading="lazy" width="1200" height="763" />
+              <div class="card-body">
+                <h3 data-i18n="parallel.name">COONEO Parallel Robotic Arm</h3>
+                <p data-i18n="parallel.desc">Ultra-light, low-energy and quiet.</p>
+                <ul class="spec-list">
+                  <li data-i18n="parallel.s1">Small AI sorting solution available, with in-house stable algorithms</li>
+                  <li data-i18n="parallel.s2">Interchangeable end effectors</li>
+                  <li data-i18n="parallel.s3">M3 mounting holes; 30 mm spacing between parallel rods</li>
+                  <li data-i18n="parallel.s4">Customisation available</li>
+                </ul>
+                <div class="card-actions">
+                  <!-- SHOPEE: when the store is ready, put this line back (with the product link) and remove the Enquire Now line:
+                  <a class="btn btn-shopee btn-sm" href="#" target="_blank" rel="noopener" data-i18n="btn.shopee">Buy on Shopee</a> -->
+                  <a class="btn btn-primary btn-sm" href="contact.html?interest=robotic-arms" data-i18n="btn.enquire">Enquire Now</a>
+                  <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           3. END EFFECTORS & MODULES
+           ========================================================= -->
+      <section class="section" id="end-effectors">
+        <div class="container">
+          <div class="section-head fade-in">
+            <p class="eyebrow" data-i18n="products.cat.effectors">End Effectors &amp; Modules</p>
+            <h2 data-i18n="effectors.title">In-house components for every farming task</h2>
+            <p class="section-intro" data-i18n="effectors.intro">Mix and match tools on our robots and arms.</p>
+          </div>
+
+          <div class="effectors fade-in">
+            <img class="effectors-img" src="Assets/Images/products/end-effectors.jpg" alt="COONEO robotic arms and end effectors" data-i18n-alt="effectors.imageAlt" loading="lazy" width="1400" height="751" />
+            <div class="effectors-grid">
+              <div class="effector">
+                <h3 data-i18n="effectors.soft.title">Soft Grippers (2- / 3-finger)</h3>
+                <p data-i18n="effectors.soft.desc">Damage-free picking of flowers, fruit and vegetables.</p>
+              </div>
+              <div class="effector">
+                <h3 data-i18n="effectors.rigid.title">3-Finger Rigid Gripper</h3>
+                <p data-i18n="effectors.rigid.desc">Stable, strong grip for heavier crops such as tomatoes.</p>
+              </div>
+              <div class="effector">
+                <h3 data-i18n="effectors.laser.title">Laser Weeder</h3>
+                <p data-i18n="effectors.laser.desc">AI vision finds weeds and removes them with a laser — no herbicides.</p>
+              </div>
+              <div class="effector">
+                <h3 data-i18n="effectors.shears.title">Electric &amp; Automatic Shears</h3>
+                <p data-i18n="effectors.shears.desc">Precise cutting for pruning and harvesting.</p>
+              </div>
+              <div class="effector">
+                <h3 data-i18n="effectors.seeder.title">Seeder &amp; Soil Preparation</h3>
+                <p data-i18n="effectors.seeder.desc">Modules for precise seeding and tillage.</p>
+              </div>
+              <div class="effector">
+                <h3 data-i18n="effectors.cutting.title">Cutting Arm</h3>
+                <p data-i18n="effectors.cutting.desc">Arm-mounted cutting for branch pruning.</p>
+              </div>
+            </div>
+            <div class="center-actions">
+              <!-- SHOPEE: when the store is ready, put this line back (with the gripper link):
+              <a class="btn btn-shopee" href="#" target="_blank" rel="noopener" data-i18n="btn.shopeeGrippers">Shop Grippers on Shopee</a> -->
+              <a class="btn btn-primary" href="contact.html?interest=effectors" data-i18n="btn.enquire">Enquire Now</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           4. AgriAI APP
+           ========================================================= -->
+      <section class="section section-dark" id="agriai">
+        <div class="container agriai-grid">
+          <div class="fade-in">
+            <p class="eyebrow eyebrow-light" data-i18n="products.cat.app">AgriAI App</p>
+            <h2 data-i18n="agriai.title">AgriAI: smart crop recognition in your pocket</h2>
+            <p data-i18n="agriai.desc">An intelligent recognition app built for agriculture.</p>
+            <ol class="steps">
+              <li data-i18n="agriai.step1">Data collection</li>
+              <li data-i18n="agriai.step2">Data labelling</li>
+              <li data-i18n="agriai.step3">Model training</li>
+              <li data-i18n="agriai.step4">Model detection</li>
+            </ol>
+            <a class="btn btn-white" href="contact.html?interest=agriai" data-i18n="btn.enquire">Enquire Now</a>
+          </div>
+          <div class="fade-in">
+            <img class="agriai-img" src="Assets/Images/products/agriai.jpg" alt="AgriAI recognising crops in field images" data-i18n-alt="agriai.imageAlt" loading="lazy" width="1000" height="763" />
+          </div>
+        </div>
+      </section>
+
+      <!-- CALL TO ACTION -->
+      <section class="cta-band">
+        <div class="container cta-band-inner fade-in">
+          <div>
+            <h2 data-i18n="ctaBand.customTitle">Need a custom configuration?</h2>
+            <p data-i18n="ctaBand.customText">We configure robots and modules for your crops.</p>
+          </div>
+          <a class="btn btn-white" href="contact.html?interest=custom" data-i18n="ctaBand.button">Send an Enquiry</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER (same on every page) -->
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <img class="footer-logo" src="Assets/Images/logo/cooneo-lockup-white.png" alt="COONEO" width="170" height="48" />
+          <p class="footer-tagline" data-i18n="footer.tagline">AI-powered agricultural robots for smart farming.</p>
+        </div>
+        <div>
+          <h4 data-i18n="footer.quickLinks">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+            <li><a href="products.html" data-i18n="nav.products">Products</a></li>
+            <li><a href="contact.html" data-i18n="nav.contact">Contact Us</a></li>
+            <!-- TODO: Shopee store link -->
+            <li><a href="#" target="_blank" rel="noopener" data-i18n="footer.shopee">Our Shopee Store</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.contact">Contact</h4>
+          <ul class="footer-links">
+            <li><a href="mailto:cooneo@outlook.com">cooneo@outlook.com</a></li>
+            <li><a href="tel:+8675526659715">+86 755 2665 9715</a></li>
+            <li><a href="https://cooneo.com" target="_blank" rel="noopener">cooneo.com</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.follow">Follow Us</h4>
+          <!-- TODO: TikTok link still to add (replace "#") -->
+          <div class="socials">
+            <a href="https://www.linkedin.com/company/cooneoofficiall/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V16M12 16v-5.5M12 13a2.5 2.5 0 0 1 5 0v3"/><circle cx="8" cy="7.5" r=".6" fill="currentColor"/></svg></a>
+            <a href="https://www.youtube.com/@COONEO.Official" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.5 2.5 4.5 5 4.5"/></svg></a>
+            <a href="https://www.instagram.com/cooneo.official/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
+            <a href="https://weibo.com/u/7464362957" target="_blank" rel="noopener" aria-label="Weibo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11.5 9.6c-4.4 0-8.5 2.7-8.5 5.6S6.5 20 10.6 20c4.6 0 8.4-2.5 8.4-5.1 0-1.5-1.2-2.1-2.3-1.9.5-1.4.2-2.6-1.3-2.6-1.2 0-2.4.6-2.4.6"/><ellipse cx="10.2" cy="15.6" rx="3.2" ry="2.3"/><path d="M15.4 4.2a4.6 4.6 0 0 1 4.6 4.6M15.4 7a1.8 1.8 0 0 1 1.8 1.8"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>© <span id="year">2026</span> <span data-i18n="footer.company">COONEO Innovation Technology (Shenzhen) Co., Ltd.</span> <span data-i18n="footer.rights">All rights reserved.</span></p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
