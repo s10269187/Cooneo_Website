@@ -8,7 +8,8 @@
    5. Scroll fade-in animations
    6. Enquiry form (contact page only)
    7. WeChat popup (contact page only)
-   8. Footer year
+   8. Product photo slideshows (products page only)
+   9. Footer year
    ========================================================== */
 
 document.documentElement.classList.remove("no-js");
@@ -56,7 +57,8 @@ const translations = {
     "home.hero.imageAlt": "The COONEO family of agricultural robots",
 
     "cycle.till": "Tillage",
-    "cycle.plant": "Planting",
+    "cycle.plant": "Seeding",
+    "cycle.inspect": "Field Inspection",
     "cycle.manage": "Crop Management",
     "cycle.harvest": "Harvesting",
     "cycle.transport": "Transport",
@@ -101,7 +103,7 @@ const translations = {
     "useCases.weed.title": "Tillage, Seeding & Weeding",
     "useCases.weed.desc":
       "Swap modules for soil preparation, precision seeding and herbicide-free mechanical or laser weeding.",
-    "useCases.logistics.title": "Farm Logistics",
+    "useCases.logistics.title": "Farm Transport",
     "useCases.logistics.desc":
       "The autonomous transport robot follows workers or drives itself, carrying harvests across fields and hills.",
     "useCases.edu.title": "Education & Research",
@@ -237,6 +239,42 @@ const translations = {
     "agriai.step4": "Model detection",
     "agriai.imageAlt": "AgriAI recognising crops in field images",
 
+    /* ---------- Product photo slideshows (products page) ---------- */
+    "carousel.prev": "Previous image",
+    "carousel.next": "Next image",
+    "carousel.goTo": "Go to image {n}",
+    "carousel.label": "{name} photos",
+    "photo.roboox.1": "RoboOX agricultural robot",
+    "photo.roboox.2": "RoboOX with a soil-preparation attachment in an open field",
+    "photo.roboox.3": "RoboOX harvesting fruit in an orchard",
+    "photo.roboox.4": "RoboOX driving on a paved path",
+    "photo.mini.1": "RoboOX mini agricultural robot",
+    "photo.mini.2": "RoboOX mini preparing soil",
+    "photo.mini.3": "RoboOX mini picking fruit in an orchard",
+    "photo.mini.4": "RoboOX mini working between crop rows",
+    "photo.stier.1": "Stier monitoring and picking robot",
+    "photo.stier.2": "Stier between strawberry rows in a greenhouse",
+    "photo.stier.3": "Stier crossing rocky ground",
+    "photo.stier.4": "Stier fitted with robotic arms and a harvest crate",
+    "photo.bison.1": "Bison tracked robot",
+    "photo.bison.2": "Bison in a vegetable garden",
+    "photo.bison.3": "Bison front view",
+    "photo.bison.4": "Bison side view",
+    "photo.bison.5": "Bison three-quarter view",
+    "photo.transport.1": "Autonomous Transport Robot carrying crates on a farm track",
+    "photo.transport.2": "Transport robot following a worker in a greenhouse",
+    "photo.transport.3": "Transport robot in auto-follow mode in a field",
+    "photo.transport.4": "Transport robot driving itself along a dirt road",
+    "photo.transport.5": "Controlling the transport robot remotely with a tablet",
+    "photo.serial.1": "Three COONEO serial robotic arms",
+    "photo.serial.2": "Serial robotic arm picking fruit among leaves",
+    "photo.serial.3": "Arm-mounted picking tool harvesting strawberries",
+    "photo.serial.4": "Rigid gripper picking a tomato",
+    "photo.parallel.1": "Parallel robotic arm sorting apples on a conveyor",
+    "photo.parallel.2": "COONEO parallel robotic arm with gripper",
+    "photo.parallel.3": "Parallel arm with quick-swap grippers",
+    "photo.parallel.4": "Interchangeable end effectors for the parallel arm",
+
     /* ================= CONTACT PAGE ================= */
     "contact.eyebrow": "Contact Us",
     "contact.title": "Let's talk about your project",
@@ -337,6 +375,7 @@ const translations = {
 
     "cycle.till": "耕",
     "cycle.plant": "种",
+    "cycle.inspect": "检",
     "cycle.manage": "管",
     "cycle.harvest": "收",
     "cycle.transport": "运",
@@ -504,6 +543,42 @@ const translations = {
     "agriai.step4": "模型检测",
     "agriai.imageAlt": "AgriAI 识别田间图像中的作物",
 
+    /* ---------- 产品图片轮播（产品页） ---------- */
+    "carousel.prev": "上一张",
+    "carousel.next": "下一张",
+    "carousel.goTo": "跳转到第 {n} 张",
+    "carousel.label": "{name} 图片",
+    "photo.roboox.1": "RoboOX 农业机器人",
+    "photo.roboox.2": "搭载整地模块的 RoboOX 在田间作业",
+    "photo.roboox.3": "RoboOX 在果园中采摘果实",
+    "photo.roboox.4": "RoboOX 在道路上行驶",
+    "photo.mini.1": "RoboOX mini 农业机器人",
+    "photo.mini.2": "RoboOX mini 整地作业",
+    "photo.mini.3": "RoboOX mini 在果园中采摘",
+    "photo.mini.4": "RoboOX mini 在作物行间作业",
+    "photo.stier.1": "Stier 监测/修剪/采摘机器人",
+    "photo.stier.2": "Stier 在草莓大棚行间作业",
+    "photo.stier.3": "Stier 越过岩石地形",
+    "photo.stier.4": "搭载机械臂与采收筐的 Stier",
+    "photo.bison.1": "Bison 履带式机器人",
+    "photo.bison.2": "Bison 在菜园中作业",
+    "photo.bison.3": "Bison 正视图",
+    "photo.bison.4": "Bison 侧视图",
+    "photo.bison.5": "Bison 侧前视图",
+    "photo.transport.1": "自主运输机器人载着货筐行驶在农田小路上",
+    "photo.transport.2": "运输机器人在温室中跟随工人",
+    "photo.transport.3": "自动跟随模式：运输机器人在田间跟随人员",
+    "photo.transport.4": "自动驾驶模式：运输机器人沿土路行驶",
+    "photo.transport.5": "遥控模式：通过平板电脑操控运输机器人",
+    "photo.serial.1": "三台 COONEO 串联机械臂",
+    "photo.serial.2": "串联机械臂在枝叶间采摘果实",
+    "photo.serial.3": "机械臂末端执行器采摘草莓",
+    "photo.serial.4": "刚性机械爪采摘番茄",
+    "photo.parallel.1": "并联机械臂在传送带上分拣苹果",
+    "photo.parallel.2": "配备机械爪的 COONEO 并联机械臂",
+    "photo.parallel.3": "可快速更换夹爪的并联机械臂",
+    "photo.parallel.4": "并联机械臂可替换的末端执行器",
+
     /* ================= 联系页 ================= */
     "contact.eyebrow": "联系我们",
     "contact.title": "聊聊您的项目",
@@ -626,6 +701,9 @@ function setLanguage(lang) {
   });
 
   langSelect.value = lang;
+
+  // Let other parts of the page (e.g. slideshows) update their own labels
+  document.dispatchEvent(new CustomEvent("cooneo:languagechange"));
 
   try {
     localStorage.setItem(STORAGE_KEY, lang);
@@ -830,6 +908,118 @@ if (wechatModal && wechatOpenBtn) {
 }
 
 /* ==========================================================
-   8. FOOTER YEAR (updates automatically)
+   8. PRODUCT PHOTO SLIDESHOWS (products page)
+   Every element with data-carousel becomes a slideshow. Its photos are
+   the <img> tags inside .carousel-track — to add a photo, just add
+   another <img> in the HTML. Arrows, dots and the counter are created
+   here automatically (and left out when there is only one photo).
+   ========================================================== */
+function initCarousels() {
+  document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+    if (carousel.dataset.ready) return; // already set up
+    carousel.dataset.ready = "true";
+
+    const track = carousel.querySelector(".carousel-track");
+    const slides = Array.from(track.children);
+    const total = slides.length;
+    let index = 0;
+
+    if (total <= 1) {
+      carousel.classList.add("is-single");
+      return;
+    }
+
+    // --- Build the controls ---
+    const makeButton = (className, symbol) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `carousel-btn ${className}`;
+      btn.innerHTML = `<span aria-hidden="true">${symbol}</span>`;
+      carousel.appendChild(btn);
+      return btn;
+    };
+    const prevBtn = makeButton("carousel-prev", "‹");
+    const nextBtn = makeButton("carousel-next", "›");
+
+    const counter = document.createElement("span");
+    counter.className = "carousel-counter";
+    counter.setAttribute("aria-live", "polite");
+    carousel.appendChild(counter);
+
+    const dotsWrap = document.createElement("div");
+    dotsWrap.className = "carousel-dots";
+    const dots = slides.map((_, i) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "carousel-dot";
+      dot.addEventListener("click", () => goTo(i));
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+    carousel.appendChild(dotsWrap);
+
+    // --- Show one slide (loops past the ends) ---
+    function goTo(i) {
+      index = (i + total) % total;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      slides.forEach((slide, k) => slide.setAttribute("aria-hidden", String(k !== index)));
+      dots.forEach((dot, k) => dot.setAttribute("aria-current", String(k === index)));
+      counter.textContent = `${index + 1} / ${total}`;
+    }
+
+    // --- Labels in the current language (re-run when the language changes) ---
+    function updateLabels() {
+      const heading = carousel.closest(".product-row, .card")?.querySelector("h3");
+      const name = heading ? heading.textContent.trim() : "";
+      carousel.setAttribute("role", "region");
+      carousel.setAttribute("aria-roledescription", "carousel");
+      carousel.setAttribute("aria-label", t("carousel.label").replace("{name}", name));
+      prevBtn.setAttribute("aria-label", t("carousel.prev"));
+      nextBtn.setAttribute("aria-label", t("carousel.next"));
+      dots.forEach((dot, k) => dot.setAttribute("aria-label", t("carousel.goTo").replace("{n}", k + 1)));
+    }
+
+    prevBtn.addEventListener("click", () => goTo(index - 1));
+    nextBtn.addEventListener("click", () => goTo(index + 1));
+
+    // Keyboard: left/right arrow keys when the slideshow is focused
+    carousel.tabIndex = 0;
+    carousel.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goTo(index - 1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goTo(index + 1);
+      }
+    });
+
+    // Touch: swipe left/right on phones and tablets
+    let startX = null;
+    let startY = null;
+    track.addEventListener("touchstart", (event) => {
+      startX = event.touches[0].clientX;
+      startY = event.touches[0].clientY;
+    }, { passive: true });
+    track.addEventListener("touchend", (event) => {
+      if (startX === null) return;
+      const dx = event.changedTouches[0].clientX - startX;
+      const dy = event.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) goTo(dx < 0 ? index + 1 : index - 1);
+      startX = null;
+    });
+
+    // Switching language only updates the labels — the current photo stays put
+    document.addEventListener("cooneo:languagechange", updateLabels);
+
+    updateLabels();
+    goTo(0);
+  });
+}
+
+initCarousels();
+
+/* ==========================================================
+   9. FOOTER YEAR (updates automatically)
    ========================================================== */
 document.getElementById("year").textContent = new Date().getFullYear();
