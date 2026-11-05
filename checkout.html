@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<!--
+  COONEO 酷牛 — CHECKOUT (order request — no payment)
+  Text lives in script.js (translations object); products, options and prices in products.js.
+  The page content is drawn by shop-pages.js.
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="meta.checkout.title">Checkout | COONEO</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/png" href="Assets/Images/logo/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Stops English text flashing before script.js switches the page to Chinese.
+         If Chinese is the chosen language, the page stays hidden until it has been
+         translated (script.js removes "lang-pending"). The 3-second timer is a safety net. -->
+    <script>
+      try {
+        var lang = localStorage.getItem("cooneo-lang") ||
+          ((navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en");
+        if (lang === "zh") {
+          document.documentElement.lang = "zh-CN";
+          document.documentElement.classList.add("lang-pending");
+          setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 3000);
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body data-page="checkout">
+    <!-- HEADER (same on every page). The heart, cart and login icons are added by shop.js -->
+    <header class="site-header" id="site-header">
+      <div class="container nav">
+        <a href="index.html" class="brand">
+          <img class="brand-logo" src="Assets/Images/logo/cooneo-lockup-black.png" alt="COONEO" width="141" height="40" />
+          <span class="brand-cn">酷牛</span>
+        </a>
+        <nav class="nav-links" id="nav-links" aria-label="Main navigation">
+          <a href="index.html" data-i18n="nav.home">Home</a>
+          <a href="products.html" data-i18n="nav.products">Products</a>
+          <a href="shop.html" data-i18n="nav.shop">Shop</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact Us</a>
+        </nav>
+        <div class="nav-actions">
+          <label class="lang-switch">
+            <span class="visually-hidden" data-i18n="nav.language">Language</span>
+            <select id="lang-select">
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+            </select>
+          </label>
+          <button class="menu-toggle" id="menu-toggle" aria-controls="nav-links" aria-expanded="false" data-i18n-aria-label="nav.menu" aria-label="Open menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section section-compact">
+        <div class="container">
+          <h1 class="page-title" data-i18n="checkout.title">Checkout</h1>
+          <!-- Shown while checking the login, or when the cart is empty / login isn't set up -->
+          <div id="checkout-gate"><div class="empty-state"><p data-i18n="checkout.loading">Loading…</p></div></div>
+
+          <!-- CHECKOUT FORM + ORDER SUMMARY (login required — no payment is taken) -->
+          <div id="checkout-main" hidden>
+            <p class="page-intro" data-i18n="checkout.intro">No payment is taken on this website.</p>
+            <div class="checkout-layout">
+              <form class="checkout-form" id="checkout-form" novalidate>
+                <h2 class="h3" data-i18n="checkout.details">Your details</h2>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="c-name" data-i18n="checkout.name">Full name</label>
+                    <input id="c-name" name="name" type="text" autocomplete="name" required />
+                    <p class="error" aria-live="polite"></p>
+                  </div>
+                  <div class="field">
+                    <label for="c-phone" data-i18n="checkout.phone">Phone / WhatsApp</label>
+                    <input id="c-phone" name="phone" type="tel" autocomplete="tel" required />
+                    <p class="error" aria-live="polite"></p>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="c-email" data-i18n="checkout.email">Email</label>
+                    <input id="c-email" name="email" type="email" autocomplete="email" required />
+                    <p class="error" aria-live="polite"></p>
+                  </div>
+                  <div class="field">
+                    <label for="c-country" data-i18n="checkout.country">Country</label>
+                    <input id="c-country" name="country" type="text" autocomplete="country-name" required />
+                    <p class="error" aria-live="polite"></p>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="c-address" data-i18n="checkout.address">Address</label>
+                  <textarea id="c-address" name="address" class="short" autocomplete="street-address" required></textarea>
+                  <p class="error" aria-live="polite"></p>
+                </div>
+                <div class="field">
+                  <label for="c-notes" data-i18n="checkout.notes">Notes (optional)</label>
+                  <textarea id="c-notes" name="notes" class="short"></textarea>
+                  <p class="error" aria-live="polite"></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" data-i18n="checkout.submit">Submit Order Request</button>
+              </form>
+              <aside class="summary-card" id="checkout-summary"></aside>
+            </div>
+          </div>
+
+          <!-- CONFIRMATION (shown after the order is saved) -->
+          <div id="checkout-done" class="checkout-done" hidden>
+            <div class="done-icon" aria-hidden="true">✓</div>
+            <h2 data-i18n="checkout.doneTitle">Order request received</h2>
+            <p><span data-i18n="order.number">Order No.</span>: <strong id="done-order-id"></strong></p>
+            <p><span data-i18n="order.status">Status</span>: <span class="status-badge" data-i18n="order.status.pending_price_confirmation">Pending price confirmation</span></p>
+            <p data-i18n="checkout.doneText">Our customer service will contact you to confirm the final price.</p>
+            <div class="direct-buttons">
+              <!-- TODO: the customer-service WhatsApp number is set in shop-pages.js (CS_WHATSAPP) -->
+              <a class="btn btn-whatsapp" id="done-whatsapp" href="#" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 9.5c.3 2.2 2.3 4.2 4.5 4.5l1-1.2 1.8.8-.3 1.6c-3.9.4-7.9-3.6-7.5-7.5l1.6-.3.8 1.8z" fill="currentColor" stroke="none"/></svg>
+                <span data-i18n="checkout.whatsapp">WhatsApp Customer Service</span>
+              </a>
+              <button type="button" class="btn btn-wechat" id="wechat-open">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>
+                <span data-i18n="checkout.wechat">WeChat Customer Service</span>
+              </button>
+            </div>
+            <a class="btn btn-outline" href="account.html" data-i18n="checkout.viewOrders">View My Orders</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER (same on every page) -->
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <img class="footer-logo" src="Assets/Images/logo/cooneo-lockup-white.png" alt="COONEO" width="170" height="48" />
+          <p class="footer-tagline" data-i18n="footer.tagline">AI-powered agricultural robots for smart farming.</p>
+        </div>
+        <div>
+          <h4 data-i18n="footer.quickLinks">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+            <li><a href="products.html" data-i18n="nav.products">Products</a></li>
+            <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
+            <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
+            <li><a href="contact.html" data-i18n="nav.contact">Contact Us</a></li>
+            <li><a href="https://cooneo.taobao.com/category.htm?appUid=RAzN8HWJL9nqtshR3xWHbb7UW1up3WTG6UH1UMcNbtbv1MnuzaF&amp;topIds=680913930379&amp;shopSearchKeyword=cooneo&amp;spm=a21n57.1.hoverItem.1" target="_blank" rel="noopener" data-i18n="footer.taobao">Our Taobao Store</a></li>
+            <!-- SHOPEE: when the store is ready, add this back with the real link:
+            <li><a href="#" target="_blank" rel="noopener" data-i18n="footer.shopee">Our Shopee Store</a></li> -->
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.contact">Contact</h4>
+          <ul class="footer-links">
+            <li><a href="mailto:cooneo@outlook.com">cooneo@outlook.com</a></li>
+            <li><a href="tel:+8675526659715">+86 755 2665 9715</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.follow">Follow Us</h4>
+          <!-- TODO: TikTok link still to add (replace "#") -->
+          <div class="socials">
+            <a href="https://www.linkedin.com/company/cooneoofficiall/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V16M12 16v-5.5M12 13a2.5 2.5 0 0 1 5 0v3"/><circle cx="8" cy="7.5" r=".6" fill="currentColor"/></svg></a>
+            <a href="https://www.youtube.com/@COONEO.Official" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.5 2.5 4.5 5 4.5"/></svg></a>
+            <a href="https://www.instagram.com/cooneo.official/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
+            <a href="https://weibo.com/u/7464362957" target="_blank" rel="noopener" aria-label="Weibo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11.5 9.6c-4.4 0-8.5 2.7-8.5 5.6S6.5 20 10.6 20c4.6 0 8.4-2.5 8.4-5.1 0-1.5-1.2-2.1-2.3-1.9.5-1.4.2-2.6-1.3-2.6-1.2 0-2.4.6-2.4.6"/><ellipse cx="10.2" cy="15.6" rx="3.2" ry="2.3"/><path d="M15.4 4.2a4.6 4.6 0 0 1 4.6 4.6M15.4 7a1.8 1.8 0 0 1 1.8 1.8"/></svg></a>
+            <a href="https://xhslink.cn/m/3RB01IE7qg3" target="_blank" rel="noopener" aria-label="Xiaohongshu (RedNote)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><text x="12" y="16.9" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" stroke="none" font-family="Noto Sans SC, Microsoft YaHei, sans-serif">书</text></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>© <span id="year">2026</span> <span data-i18n="footer.company">COONEO Innovation Technology (Shenzhen) Co., Ltd.</span> <span data-i18n="footer.rights">All rights reserved.</span></p>
+      </div>
+    </footer>
+
+    <!-- Shared scripts (same order on every page):
+         script.js   = translations + language switcher (runs first so the page appears quickly)
+         Firebase    = login + saved carts/orders (pinned version; settings in firebase-config.js)
+         products.js = everything the shop sells (names, options, prices)
+         shop.js     = cart, favourites, nav icons and the slide-out cart drawer -->
+    <!-- TODO: if customer service uses a different WeChat QR code, change the image below -->
+    <!-- WECHAT POPUP -->
+    <div class="modal" id="wechat-modal" hidden>
+      <div class="modal-backdrop" data-close-modal></div>
+      <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="wechat-title">
+        <button type="button" class="modal-close" data-close-modal data-i18n-aria-label="modal.close" aria-label="Close">×</button>
+        <h3 id="wechat-title" data-i18n="modal.title">Scan to follow us on WeChat</h3>
+        <img class="wechat-qr" src="Assets/Images/wechat-qr.png" alt="COONEO WeChat Official Account QR code" data-i18n-alt="modal.qr" width="417" height="421" />
+        <p data-i18n="modal.id">Follow our WeChat Official Account for the latest news.</p>
+      </div>
+    </div>
+
+    <!-- Shared scripts (same order on every page):
+         script.js   = translations + language switcher (runs first so the page appears quickly)
+         Firebase    = login + saved carts/orders (pinned version; settings in firebase-config.js)
+         products.js = everything the shop sells (names, options, prices)
+         shop.js     = cart, favourites, nav icons and the slide-out cart drawer -->
+    <!-- Shared scripts (same order on every page):
+         script.js   = translations + language switcher (runs first so the page appears quickly)
+         Firebase    = login + saved carts/orders (pinned version; settings in firebase-config.js)
+         products.js = everything the shop sells (names, options, prices)
+         shop.js     = cart, favourites, nav icons and the slide-out cart drawer -->
+    <script src="script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="products.js"></script>
+    <script src="shop.js"></script>
+    <script src="shop-pages.js"></script>  <!-- draws this page (see data-page on <body>) -->
+  </body>
+</html>

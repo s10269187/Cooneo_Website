@@ -66,6 +66,7 @@
         <nav class="nav-links" id="nav-links" aria-label="Main navigation">
           <a href="index.html" aria-current="page" data-i18n="nav.home">Home</a>
           <a href="products.html" data-i18n="nav.products">Products</a>
+          <a href="shop.html" data-i18n="nav.shop">Shop</a>
           <a href="contact.html" data-i18n="nav.contact">Contact Us</a>
         </nav>
 
@@ -301,6 +302,7 @@
           <ul class="footer-links">
             <li><a href="index.html" data-i18n="nav.home">Home</a></li>
             <li><a href="products.html" data-i18n="nav.products">Products</a></li>
+            <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact Us</a></li>
             <li><a href="https://cooneo.taobao.com/category.htm?appUid=RAzN8HWJL9nqtshR3xWHbb7UW1up3WTG6UH1UMcNbtbv1MnuzaF&amp;topIds=680913930379&amp;shopSearchKeyword=cooneo&amp;spm=a21n57.1.hoverItem.1" target="_blank" rel="noopener" data-i18n="footer.taobao">Our Taobao Store</a></li>
             <!-- SHOPEE: when the store is ready, add this back with the real link:
@@ -332,6 +334,17 @@
       </div>
     </footer>
 
+    <!-- Shared scripts (same order on every page):
+         script.js   = translations + language switcher (runs first so the page appears quickly)
+         Firebase    = login + saved carts/orders (pinned version; settings in firebase-config.js)
+         products.js = everything the shop sells (names, options, prices)
+         shop.js     = cart, favourites, nav icons and the slide-out cart drawer -->
     <script src="script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="products.js"></script>
+    <script src="shop.js"></script>
   </body>
 </html>
