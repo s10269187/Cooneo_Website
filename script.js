@@ -209,7 +209,7 @@ const translations = {
       "Ultra-light, low-energy and quiet — suited to small production lines, labs and DIY development.",
     "parallel.s1": "Small AI sorting solution available, with in-house stable algorithms",
     "parallel.s2": "Interchangeable end effectors: soft/rigid grippers, seeding, cutting",
-    "parallel.s3": "M3 mounting holes; 30 mm spacing between parallel rods",
+    "parallel.s3": "M3 mounting holes; 30mm spacing between parallel rods",
     "parallel.s4": "Customisation available",
 
     "effectors.title": "In-house components for every farming task",
