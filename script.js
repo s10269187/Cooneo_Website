@@ -67,7 +67,7 @@ const translations = {
     "about.eyebrow": "About Us",
     "about.title": "Reshaping modern farming with AI and robotics",
     "about.p1":
-      "COONEO is committed to applying advanced AI, IoT and robotics to smart agriculture and environmental protection. Our product line covers the full farming cycle — tillage, planting, crop management, harvesting and transport — making agriculture smarter, more precise and more sustainable, while genuinely cutting costs and raising efficiency for growers.",
+      "COONEO applies advanced AI, IoT and robotics to smart agriculture and environmental protection. Our product line covers the full farming cycle — tillage, planting, crop management, harvesting and transport — making agriculture smarter, more precise and more sustainable, while genuinely cutting costs and raising efficiency for growers.",
     "about.p2":
       "Rather than single-purpose machines, we build a complete smart-farming ecosystem: robot platforms, in-house core components and intelligent algorithms that work together, refined through repeated field trials.",
     "about.p3":
@@ -105,7 +105,7 @@ const translations = {
       "Swap modules for soil preparation, precision seeding and herbicide-free mechanical or laser weeding.",
     "useCases.logistics.title": "Farm Transport",
     "useCases.logistics.desc":
-      "The autonomous transport robot follows workers or drives itself, carrying harvests across fields and hills.",
+      "The autonomous transport robot follows workers or drives itself, carrying harvests across fields and hills. Its compact body turns on the spot, so it fits easily into lifts and narrow spaces.",
     "useCases.edu.title": "Education & Research",
     "useCases.edu.desc":
       "Open robotic arms with STM32, ESP32, Raspberry Pi and ROS support for makers, classrooms and university labs.",
@@ -158,7 +158,7 @@ const translations = {
     "roboox.modules": "Soil preparation system, serial/parallel arms, rigid/soft picking grippers",
     "roboox.apps": "Soil preparation, heavy material transport, smart harvesting",
     "roboox.drive": "4-wheel differential",
-    "roboox.power": "48 V battery",
+    "roboox.power": "48V battery",
 
     "mini.kicker": "Precision Multi-Functional Agricultural Robot",
     "mini.desc":
@@ -166,21 +166,21 @@ const translations = {
     "mini.modules": "Soil preparation, seeding system, laser weeder, serial/parallel arms, rigid/soft picking grippers",
     "mini.apps": "Soil preparation, seeding, mechanical/laser weeding, flower, fruit and vegetable picking",
     "mini.drive": "Differential, hub motors",
-    "mini.power": "36 V lithium battery",
+    "mini.power": "36V lithium battery",
 
     "stier.kicker": "Monitoring / Pruning / Picking Robot",
     "stier.desc":
-      "The most compact robot in the range. It turns on the spot and is designed for low canopies and dense crop rows such as strawberry tunnels and vineyards. Ultra-quiet operation suits greenhouses and orchards.",
+      "The most compact robot in the range. It turns on the spot and is designed for low canopies and dense crop rows such as strawberry tunnels and vineyards. Its ultra-quiet operation suits greenhouses and orchards.",
     "stier.modules": "Serial/parallel arms, rigid/soft picking grippers",
     "stier.apps": "Close-range monitoring, branch pruning, picking",
-    "stier.power": "36 V lithium battery",
+    "stier.power": "36V lithium battery",
 
     "bison.kicker": "Tracked Robot",
     "bison.desc":
       "A modular, lightweight tracked robot. Low ground pressure and strong grip keep it stable on mud, sand and steep slopes, and it can plan routes and avoid obstacles on its own.",
     "bison.modules": "Serial/parallel arms, rigid/soft picking grippers, crop-protection spray boom",
     "bison.apps": "Inspection, crop protection, transport, picking",
-    "bison.power": "24 V lithium battery",
+    "bison.power": "24V lithium battery",
 
     "transport.kicker": "Smart Transport",
     "transport.name": "Autonomous Transport Robot",
@@ -217,7 +217,7 @@ const translations = {
       "Our self-developed tools fit COONEO robots and arms, covering tillage, seeding, monitoring, weeding, pruning and picking.",
     "effectors.imageAlt": "COONEO robotic arms and end effectors",
     "effectors.imageSrc": "Assets/Images/products/end-effectors.jpg",
-    "effectors.soft.title": "Soft Grippers (2- / 3-finger)",
+    "effectors.soft.title": "Soft Grippers (2-Finger / 3-Finger)",
     "effectors.soft.desc": "Soft, bionic materials wrap around produce for damage-free picking of flowers, fruit and vegetables.",
     "effectors.rigid.title": "3-Finger Rigid Gripper",
     "effectors.rigid.desc": "A stable, durable grip for heavier crops such as tomatoes.",
@@ -225,9 +225,13 @@ const translations = {
     "effectors.laser.desc": "AI vision finds weeds and removes them with a laser — no herbicides needed.",
     "effectors.shears.title": "Electric & Automatic Shears",
     "effectors.shears.desc": "Precise cutting for pruning and harvesting.",
-    "effectors.seeder.title": "Seeder & Soil Preparation",
-    "effectors.seeder.desc": "Modules for precision seeding and soil preparation.",
-    "effectors.cutting.title": "Cutting Arm",
+    "effectors.seeder.title": "Seeder",
+    "effectors.seeder.desc": "A module for precision seeding.",
+    "effectors.group.arms": "Robotic Arms",
+    "effectors.group.tools": "End Effectors",
+    "effectors.serial.title": "Serial Robotic Arm",
+    "effectors.parallel.title": "Parallel Robotic Arm",
+    "effectors.cutting.title": "Cutting Robotic Arm",
     "effectors.cutting.desc": "Arm-mounted cutting tool for branch pruning.",
 
     "agriai.title": "AgriAI: smart crop recognition in your pocket",
@@ -283,7 +287,6 @@ const translations = {
     "contact.detailsTitle": "Contact details",
     "contact.email": "Email",
     "contact.phone": "Phone",
-    "contact.website": "Website",
     "contact.address": "Company",
     "contact.addressValue": "COONEO Innovation Technology (Shenzhen) Co., Ltd.",
     "contact.direct": "Prefer to chat directly?",
@@ -415,7 +418,7 @@ const translations = {
     "useCases.weed.title": "整地、播种与除草",
     "useCases.weed.desc": "更换功能模块即可完成整地、精准播种，以及无农药的机械或激光除草。",
     "useCases.logistics.title": "农业转运",
-    "useCases.logistics.desc": "自主运输机器人可跟随人员或自动驾驶，在田间与山地间转运农产品。",
+    "useCases.logistics.desc": "自主运输机器人可跟随人员或自动驾驶，在田间与山地间转运农产品；机身小巧、可原地转向，轻松进出电梯与狭窄空间。",
     "useCases.edu.title": "教学与科研",
     "useCases.edu.desc": "开放式机械臂，兼容 STM32、ESP32、树莓派及 ROS，适用于创客、课堂与高校实验室。",
 
@@ -529,8 +532,12 @@ const translations = {
     "effectors.laser.desc": "AI 视觉识别杂草并以激光清除，无需使用除草剂。",
     "effectors.shears.title": "电动剪刀与自动剪刀",
     "effectors.shears.desc": "精准剪切，用于修剪与采收。",
-    "effectors.seeder.title": "播种器与整地系统",
-    "effectors.seeder.desc": "实现精准播种与整地作业。",
+    "effectors.seeder.title": "播种器",
+    "effectors.seeder.desc": "实现精准播种作业。",
+    "effectors.group.arms": "机械臂",
+    "effectors.group.tools": "末端执行器",
+    "effectors.serial.title": "串联机械臂",
+    "effectors.parallel.title": "并联机械臂",
     "effectors.cutting.title": "剪切机械臂",
     "effectors.cutting.desc": "臂载剪切工具，用于枝条修剪。",
 
@@ -586,7 +593,6 @@ const translations = {
     "contact.detailsTitle": "联系方式",
     "contact.email": "邮箱",
     "contact.phone": "电话",
-    "contact.website": "官网",
     "contact.address": "公司",
     "contact.addressValue": "酷牛创新技术（深圳）有限公司",
     "contact.direct": "想直接沟通？",
@@ -680,6 +686,14 @@ function setLanguage(lang) {
     if (src && el.getAttribute("src") !== src) el.src = src;
   });
 
+  // "Download Spec Sheet" buttons: point to the PDF in the current language.
+  // Files live in Assets/Docs/spec-sheets/ as <product>-en.pdf and <product>-zh.pdf
+  document.querySelectorAll("[data-spec-sheet]").forEach((el) => {
+    const file = `${el.dataset.specSheet}-${lang}.pdf`;
+    el.href = `Assets/Docs/spec-sheets/${file}`;
+    el.setAttribute("download", `COONEO-${file}`);
+  });
+
   // Image descriptions (alt text)
   document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
     el.alt = t(el.dataset.i18nAlt);
@@ -726,6 +740,8 @@ function getInitialLanguage() {
 
 langSelect.addEventListener("change", () => setLanguage(langSelect.value));
 setLanguage(getInitialLanguage());
+// The page was hidden (see the small script in each page's <head>) — show it now it is translated
+document.documentElement.classList.remove("lang-pending");
 
 /* ==========================================================
    3. MOBILE MENU (hamburger)

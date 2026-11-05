@@ -37,6 +37,20 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <!-- Stops English text flashing before script.js switches the page to Chinese.
+         If Chinese is the chosen language, the page stays hidden until it has been
+         translated (script.js removes "lang-pending"). The 3-second timer is a safety net. -->
+    <script>
+      try {
+        var lang = localStorage.getItem("cooneo-lang") ||
+          ((navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en");
+        if (lang === "zh") {
+          document.documentElement.lang = "zh-CN";
+          document.documentElement.classList.add("lang-pending");
+          setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 3000);
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <!-- =========================================================
@@ -288,7 +302,7 @@
             <li><a href="index.html" data-i18n="nav.home">Home</a></li>
             <li><a href="products.html" data-i18n="nav.products">Products</a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact Us</a></li>
-            <li><a href="https://cooneo.taobao.com/" target="_blank" rel="noopener" data-i18n="footer.taobao">Our Taobao Store</a></li>
+            <li><a href="https://cooneo.taobao.com/category.htm?appUid=RAzN8HWJL9nqtshR3xWHbb7UW1up3WTG6UH1UMcNbtbv1MnuzaF&amp;topIds=680913930379&amp;shopSearchKeyword=cooneo&amp;spm=a21n57.1.hoverItem.1" target="_blank" rel="noopener" data-i18n="footer.taobao">Our Taobao Store</a></li>
             <!-- SHOPEE: when the store is ready, add this back with the real link:
             <li><a href="#" target="_blank" rel="noopener" data-i18n="footer.shopee">Our Shopee Store</a></li> -->
           </ul>
@@ -298,7 +312,6 @@
           <ul class="footer-links">
             <li><a href="mailto:cooneo@outlook.com">cooneo@outlook.com</a></li>
             <li><a href="tel:+8675526659715">+86 755 2665 9715</a></li>
-            <li><a href="https://cooneo.com" target="_blank" rel="noopener">cooneo.com</a></li>
           </ul>
         </div>
         <div>

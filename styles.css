@@ -475,8 +475,15 @@ html[lang="zh-CN"] .hero h1 {
   border-left: 3px solid var(--sky);
   background: rgba(255, 255, 255, 0.08);
   color: #d6e8f8;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
+}
+
+/* On wider screens keep the slogan on one line (it can wrap on phones/tablets) */
+@media (min-width: 1100px) {
+  .slogan {
+    white-space: nowrap;
+  }
 }
 
 .cta-row {
@@ -1161,7 +1168,16 @@ html[lang="zh-CN"] .effectors-img {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin-top: 32px;
+  margin-top: 16px;
+}
+
+/* Sub-headings that split the section into "Robotic Arms" and "End Effectors" */
+.effectors-group-title {
+  margin: 40px 0 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  font-size: 1.35rem;
+  color: var(--primary-dark);
 }
 
 .effector {
@@ -1171,7 +1187,8 @@ html[lang="zh-CN"] .effectors-img {
   background: var(--bg-soft);
 }
 
-.effector h3 {
+.effector h4 {
+  margin: 0 0 8px;
   font-size: 1.05rem;
   color: var(--primary-dark);
 }
@@ -1764,4 +1781,10 @@ html[lang="zh-CN"] .effectors-img {
     grid-template-columns: 1fr;
     gap: 28px;
   }
+}
+
+/* Hide the page while it is being switched to Chinese (prevents an English flash).
+   Added by the small script in each page's <head>, removed by script.js. */
+.lang-pending body {
+  visibility: hidden;
 }

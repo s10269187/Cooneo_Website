@@ -23,6 +23,20 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <!-- Stops English text flashing before script.js switches the page to Chinese.
+         If Chinese is the chosen language, the page stays hidden until it has been
+         translated (script.js removes "lang-pending"). The 3-second timer is a safety net. -->
+    <script>
+      try {
+        var lang = localStorage.getItem("cooneo-lang") ||
+          ((navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en");
+        if (lang === "zh") {
+          document.documentElement.lang = "zh-CN";
+          document.documentElement.classList.add("lang-pending");
+          setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 3000);
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <!-- HEADER (same on every page) -->
@@ -66,7 +80,7 @@
             <a href="#end-effectors" data-i18n="products.cat.effectors">End Effectors &amp; Modules</a>
             <a href="#agriai" data-i18n="products.cat.app">AgriAI App</a>
             <!-- Shortcut to the Taobao store (opens in a new tab) -->
-            <a class="jump-store" href="https://cooneo.taobao.com/" target="_blank" rel="noopener"><span data-i18n="products.taobaoShortcut">Taobao Store</span> <span aria-hidden="true">↗</span></a>
+            <a class="jump-store" href="https://cooneo.taobao.com/category.htm?appUid=RAzN8HWJL9nqtshR3xWHbb7UW1up3WTG6UH1UMcNbtbv1MnuzaF&amp;topIds=680913930379&amp;shopSearchKeyword=cooneo&amp;spm=a21n57.1.hoverItem.1" target="_blank" rel="noopener"><span data-i18n="products.taobaoShortcut">Taobao Store</span> <span aria-hidden="true">↗</span></a>
           </nav>
         </div>
       </section>
@@ -103,17 +117,16 @@
               <p class="product-meta"><strong data-i18n="label.modules">Compatible modules:</strong> <span data-i18n="roboox.modules">Soil preparation system, serial/parallel arms, rigid/soft picking grippers</span></p>
               <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="roboox.apps">Soil preparation, heavy material transport, smart harvesting</span></p>
               <dl class="spec-table">
-                <div><dt data-i18n="spec.size">Dimensions</dt><dd>749 × 1016 × 590 mm</dd></div>
+                <div><dt data-i18n="spec.size">Dimensions</dt><dd>749 mm × 1015.79 mm × 590 mm</dd></div>
                 <div><dt data-i18n="spec.speed">Max. speed</dt><dd>2 m/s</dd></div>
                 <div><dt data-i18n="spec.drive">Drive</dt><dd data-i18n="roboox.drive">4-wheel differential</dd></div>
-                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="roboox.power">48 V battery</dd></div>
+                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="roboox.power">48V battery</dd></div>
                 <div><dt data-i18n="spec.nav">Navigation</dt><dd data-i18n="spec.navValue">GPS / RTK / vision</dd></div>
                 <div><dt data-i18n="spec.comms">Communication</dt><dd>WiFi / 4G / 5G</dd></div>
               </dl>
               <div class="product-actions">
                 <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
-                <!-- TODO: spec sheet PDF link -->
-                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                <a class="btn btn-outline btn-sm" href="Assets/Docs/spec-sheets/roboox-en.pdf" data-spec-sheet="roboox" download data-i18n="btn.specSheet">Download Spec Sheet</a>
               </div>
             </div>
           </article>
@@ -139,16 +152,16 @@
               <p class="product-meta"><strong data-i18n="label.modules">Compatible modules:</strong> <span data-i18n="mini.modules">Soil preparation, seeding system, laser weeder, arms, grippers</span></p>
               <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="mini.apps">Soil preparation, seeding, weeding, harvesting</span></p>
               <dl class="spec-table">
-                <div><dt data-i18n="spec.size">Dimensions</dt><dd>725 × 815 × 618 mm</dd></div>
+                <div><dt data-i18n="spec.size">Dimensions</dt><dd>725.14 mm × 814.99 mm × 618.01 mm</dd></div>
                 <div><dt data-i18n="spec.speed">Max. speed</dt><dd>2 m/s</dd></div>
                 <div><dt data-i18n="spec.drive">Drive</dt><dd data-i18n="mini.drive">Differential, hub motors</dd></div>
-                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="mini.power">36 V lithium battery</dd></div>
+                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="mini.power">36V lithium battery</dd></div>
                 <div><dt data-i18n="spec.nav">Navigation</dt><dd data-i18n="spec.navValue">GPS / RTK / vision</dd></div>
                 <div><dt data-i18n="spec.comms">Communication</dt><dd>WiFi / 4G / 5G</dd></div>
               </dl>
               <div class="product-actions">
                 <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
-                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                <a class="btn btn-outline btn-sm" href="Assets/Docs/spec-sheets/roboox-mini-en.pdf" data-spec-sheet="roboox-mini" download data-i18n="btn.specSheet">Download Spec Sheet</a>
               </div>
             </div>
           </article>
@@ -174,16 +187,16 @@
               <p class="product-meta"><strong data-i18n="label.modules">Compatible modules:</strong> <span data-i18n="stier.modules">Serial/parallel arms, rigid/soft picking grippers</span></p>
               <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="stier.apps">Close-range monitoring, pruning, picking</span></p>
               <dl class="spec-table">
-                <div><dt data-i18n="spec.size">Dimensions</dt><dd>667 × 650 × 296 mm</dd></div>
+                <div><dt data-i18n="spec.size">Dimensions</dt><dd>666.58 mm × 650.00 mm × 296.02 mm</dd></div>
                 <div><dt data-i18n="spec.weight">Weight</dt><dd>30 kg</dd></div>
                 <div><dt data-i18n="spec.payload">Max. payload</dt><dd>50 kg</dd></div>
                 <div><dt data-i18n="spec.slope">Max. slope</dt><dd>30°</dd></div>
                 <div><dt data-i18n="spec.speed">Max. speed</dt><dd>2 m/s</dd></div>
-                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="stier.power">36 V lithium battery</dd></div>
+                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="stier.power">36V lithium battery</dd></div>
               </dl>
               <div class="product-actions">
                 <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
-                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                <a class="btn btn-outline btn-sm" href="Assets/Docs/spec-sheets/stier-en.pdf" data-spec-sheet="stier" download data-i18n="btn.specSheet">Download Spec Sheet</a>
               </div>
             </div>
           </article>
@@ -210,16 +223,16 @@
               <p class="product-meta"><strong data-i18n="label.modules">Compatible modules:</strong> <span data-i18n="bison.modules">Serial/parallel arms, grippers, crop-protection spray boom</span></p>
               <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="bison.apps">Inspection, crop protection, transport, picking</span></p>
               <dl class="spec-table">
-                <div><dt data-i18n="spec.size">Dimensions</dt><dd>630 × 556 × 240 mm</dd></div>
+                <div><dt data-i18n="spec.size">Dimensions</dt><dd>630.00 mm × 556.00 mm × 240.48 mm</dd></div>
                 <div><dt data-i18n="spec.weight">Weight</dt><dd>35 kg</dd></div>
                 <div><dt data-i18n="spec.payload">Max. payload</dt><dd>50 kg</dd></div>
                 <div><dt data-i18n="spec.slope">Max. slope</dt><dd>45°</dd></div>
                 <div><dt data-i18n="spec.speed">Max. speed</dt><dd>2 m/s</dd></div>
-                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="bison.power">24 V lithium battery</dd></div>
+                <div><dt data-i18n="spec.power">Power</dt><dd data-i18n="bison.power">24V lithium battery</dd></div>
               </dl>
               <div class="product-actions">
                 <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
-                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                <a class="btn btn-outline btn-sm" href="Assets/Docs/spec-sheets/bison-en.pdf" data-spec-sheet="bison" download data-i18n="btn.specSheet">Download Spec Sheet</a>
               </div>
             </div>
           </article>
@@ -257,7 +270,7 @@
               <p class="product-meta"><strong data-i18n="label.apps">Typical uses:</strong> <span data-i18n="transport.apps">Harvest-season produce transport, park logistics</span></p>
               <div class="product-actions">
                 <a class="btn btn-primary btn-sm" href="contact.html?interest=agri-robots" data-i18n="btn.enquire">Enquire Now</a>
-                <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                <a class="btn btn-outline btn-sm" href="Assets/Docs/spec-sheets/transport-robot-en.pdf" data-spec-sheet="transport-robot" download data-i18n="btn.specSheet">Download Spec Sheet</a>
               </div>
             </div>
           </article>
@@ -300,8 +313,7 @@
                   <!-- SHOPEE: when the store is ready, put this line back (with the product link) and remove the Enquire Now line:
                   <a class="btn btn-shopee btn-sm" href="#" target="_blank" rel="noopener" data-i18n="btn.shopee">Buy on Shopee</a> -->
                   <a class="btn btn-primary btn-sm" href="contact.html?interest=robotic-arms" data-i18n="btn.enquire">Enquire Now</a>
-                  <!-- TODO: spec sheet PDF link -->
-                  <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                  <a class="btn btn-outline btn-sm" href="Assets/Docs/spec-sheets/serial-arm-en.pdf" data-spec-sheet="serial-arm" download data-i18n="btn.specSheet">Download Spec Sheet</a>
                 </div>
               </div>
             </article>
@@ -330,7 +342,7 @@
                   <!-- SHOPEE: when the store is ready, put this line back (with the product link) and remove the Enquire Now line:
                   <a class="btn btn-shopee btn-sm" href="#" target="_blank" rel="noopener" data-i18n="btn.shopee">Buy on Shopee</a> -->
                   <a class="btn btn-primary btn-sm" href="contact.html?interest=robotic-arms" data-i18n="btn.enquire">Enquire Now</a>
-                  <a class="btn btn-outline btn-sm" href="#" data-i18n="btn.specSheet">Download Spec Sheet</a>
+                  <a class="btn btn-outline btn-sm" href="Assets/Docs/spec-sheets/parallel-arm-en.pdf" data-spec-sheet="parallel-arm" download data-i18n="btn.specSheet">Download Spec Sheet</a>
                 </div>
               </div>
             </article>
@@ -351,30 +363,44 @@
 
           <div class="effectors fade-in">
             <img class="effectors-img" src="Assets/Images/products/end-effectors.jpg" data-i18n-src="effectors.imageSrc" alt="COONEO robotic arms and end effectors" data-i18n-alt="effectors.imageAlt" loading="lazy" width="1400" height="751" />
+            <!-- The parts are split into two groups, following the brochure (page 17) -->
+            <h3 class="effectors-group-title" data-i18n="effectors.group.arms">Robotic Arms</h3>
             <div class="effectors-grid">
               <div class="effector">
-                <h3 data-i18n="effectors.soft.title">Soft Grippers (2- / 3-finger)</h3>
-                <p data-i18n="effectors.soft.desc">Damage-free picking of flowers, fruit and vegetables.</p>
+                <h4 data-i18n="effectors.serial.title">Serial Robotic Arm</h4>
+                <p data-i18n="serial.desc">Plug-and-play and open for secondary development.</p>
               </div>
               <div class="effector">
-                <h3 data-i18n="effectors.rigid.title">3-Finger Rigid Gripper</h3>
-                <p data-i18n="effectors.rigid.desc">Stable, strong grip for heavier crops such as tomatoes.</p>
+                <h4 data-i18n="effectors.parallel.title">Parallel Robotic Arm</h4>
+                <p data-i18n="parallel.desc">Ultra-light, low-energy and quiet.</p>
               </div>
               <div class="effector">
-                <h3 data-i18n="effectors.laser.title">Laser Weeder</h3>
+                <h4 data-i18n="effectors.cutting.title">Cutting Robotic Arm</h4>
+                <p data-i18n="effectors.cutting.desc">Arm-mounted cutting for branch pruning.</p>
+              </div>
+              <div class="effector">
+                <h4 data-i18n="effectors.laser.title">Laser Weeder</h4>
                 <p data-i18n="effectors.laser.desc">AI vision finds weeds and removes them with a laser — no herbicides.</p>
               </div>
               <div class="effector">
-                <h3 data-i18n="effectors.shears.title">Electric &amp; Automatic Shears</h3>
+                <h4 data-i18n="effectors.seeder.title">Seeder</h4>
+                <p data-i18n="effectors.seeder.desc">A module for precision seeding.</p>
+              </div>
+            </div>
+
+            <h3 class="effectors-group-title" data-i18n="effectors.group.tools">End Effectors</h3>
+            <div class="effectors-grid">
+              <div class="effector">
+                <h4 data-i18n="effectors.soft.title">Soft Grippers (2-Finger / 3-Finger)</h4>
+                <p data-i18n="effectors.soft.desc">Damage-free picking of flowers, fruit and vegetables.</p>
+              </div>
+              <div class="effector">
+                <h4 data-i18n="effectors.rigid.title">3-Finger Rigid Gripper</h4>
+                <p data-i18n="effectors.rigid.desc">Stable, strong grip for heavier crops such as tomatoes.</p>
+              </div>
+              <div class="effector">
+                <h4 data-i18n="effectors.shears.title">Electric &amp; Automatic Shears</h4>
                 <p data-i18n="effectors.shears.desc">Precise cutting for pruning and harvesting.</p>
-              </div>
-              <div class="effector">
-                <h3 data-i18n="effectors.seeder.title">Seeder &amp; Soil Preparation</h3>
-                <p data-i18n="effectors.seeder.desc">Modules for precise seeding and tillage.</p>
-              </div>
-              <div class="effector">
-                <h3 data-i18n="effectors.cutting.title">Cutting Arm</h3>
-                <p data-i18n="effectors.cutting.desc">Arm-mounted cutting for branch pruning.</p>
               </div>
             </div>
             <div class="center-actions">
@@ -434,7 +460,7 @@
             <li><a href="index.html" data-i18n="nav.home">Home</a></li>
             <li><a href="products.html" data-i18n="nav.products">Products</a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact Us</a></li>
-            <li><a href="https://cooneo.taobao.com/" target="_blank" rel="noopener" data-i18n="footer.taobao">Our Taobao Store</a></li>
+            <li><a href="https://cooneo.taobao.com/category.htm?appUid=RAzN8HWJL9nqtshR3xWHbb7UW1up3WTG6UH1UMcNbtbv1MnuzaF&amp;topIds=680913930379&amp;shopSearchKeyword=cooneo&amp;spm=a21n57.1.hoverItem.1" target="_blank" rel="noopener" data-i18n="footer.taobao">Our Taobao Store</a></li>
             <!-- SHOPEE: when the store is ready, add this back with the real link:
             <li><a href="#" target="_blank" rel="noopener" data-i18n="footer.shopee">Our Shopee Store</a></li> -->
           </ul>
@@ -444,7 +470,6 @@
           <ul class="footer-links">
             <li><a href="mailto:cooneo@outlook.com">cooneo@outlook.com</a></li>
             <li><a href="tel:+8675526659715">+86 755 2665 9715</a></li>
-            <li><a href="https://cooneo.com" target="_blank" rel="noopener">cooneo.com</a></li>
           </ul>
         </div>
         <div>
