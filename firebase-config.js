@@ -24,10 +24,10 @@
    The security rules in firestore.rules are what protect the data.
    ========================================================== */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY", // TODO
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com", // TODO
-  projectId: "YOUR_PROJECT_ID", // TODO
-  storageBucket: "YOUR_PROJECT_ID.appspot.com", // TODO
-  messagingSenderId: "YOUR_SENDER_ID", // TODO
-  appId: "YOUR_APP_ID", // TODO
+  apiKey: "AIzaSyAYVDtGgp0t8RDovvPzc9aNijVkLjug-wM",
+  authDomain: "cooneo-website.firebaseapp.com",
+  projectId: "cooneo-website",
+  storageBucket: "cooneo-website.firebasestorage.app",
+  messagingSenderId: "253229631827",
+  appId: "1:253229631827:web:6e9823e178ebc8ca6df9a6",
 };

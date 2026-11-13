@@ -67,8 +67,7 @@ const PRODUCTS = [
         choices: [
           { id: "tilling", label: { en: "Tilling", zh: "耕地" }, price: 0 }, // TODO: price
           { id: "weeding", label: { en: "Weeding", zh: "除草" }, price: 0 }, // TODO: price
-          { id: "spraying", label: { en: "Spraying", zh: "喷洒" }, price: 0 }, // TODO: price
-          { id: "harvesting", label: { en: "Harvesting assist", zh: "采收辅助" }, price: 0 }, // TODO: price
+          { id: "harvesting", label: { en: "Harvesting", zh: "采收" }, price: 0 }, // TODO: price
         ],
       },
     ],

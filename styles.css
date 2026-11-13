@@ -1522,6 +1522,12 @@ html[lang="zh-CN"] .effectors-img {
   height: 20px;
 }
 
+/* The Xiaohongshu logo is a wide "小红书" wordmark, so it gets more width */
+.socials svg.xhs-logo {
+  width: 30px;
+  height: 12.5px;
+}
+
 .footer-bottom {
   margin-top: 48px;
   padding: 20px 0;
@@ -2834,15 +2840,46 @@ body.no-scroll {
   color: var(--muted);
 }
 
+/* Tick box under the checkout form ("Save these details to my account") */
+.check-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 18px;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.check-field input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+/* Country dropdown: same look as the text boxes, with a small arrow */
+.checkout-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23142869' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 14px center;
+  cursor: pointer;
+}
+
+/* "Delivery details" form on My Account */
+.account-details {
+  margin-bottom: 40px;
+  box-shadow: none;
+}
+
 /* ---------- Shop: smaller screens ---------- */
 @media (max-width: 1080px) {
   .shop-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Only the icon for "Login" / the user's name on smaller laptops */
+  /* Smaller laptops: keep the name, but shorten long ones with "…" */
   .nav-account-name {
-    display: none;
+    max-width: 80px;
   }
 }
 

@@ -22,6 +22,48 @@
   // TODO: customer-service WhatsApp number (digits only, with country code, e.g. 6591234567)
   const CS_WHATSAPP = "XXXXXXXXXX";
 
+  // Delivery details saved to the account (the same boxes on checkout and My Account)
+  const DETAIL_FIELDS = ["firstName", "lastName", "phone", "address1", "address2", "postalCode", "city", "country"];
+
+  // Countries in the Country dropdown. Names are in script.js ("country.SG" etc.).
+  // TODO: add or remove countries here (and add their names in script.js).
+  const COUNTRIES = ["SG", "MY", "CN", "HK", "TW", "ID", "TH", "VN", "PH", "BR", "OTHER"];
+
+  // Fill a Country dropdown in the current language. The saved value is the English name
+  // (e.g. "Singapore") so it reads clearly in the Firebase console.
+  function fillCountrySelect(select) {
+    const current = select.value;
+    select.innerHTML =
+      `<option value="">${esc(t("checkout.chooseCountry"))}</option>` +
+      COUNTRIES.map((code) => `<option value="${esc(translations.en["country." + code])}">${esc(t("country." + code))}</option>`).join("");
+    select.value = current;
+  }
+
+  // The user's saved details, ready to put into a form.
+  // (Older accounts saved a single "name" and "address" box, so those are used as a fallback.)
+  function savedDetails() {
+    const p = S.state.profile || {};
+    const fullName = p.name || (S.state.user && S.state.user.displayName) || "";
+    return {
+      firstName: p.firstName || (p.lastName ? "" : fullName),
+      lastName: p.lastName || "",
+      phone: p.phone || "",
+      address1: p.address1 || p.address || "",
+      address2: p.address2 || "",
+      postalCode: p.postalCode || "",
+      city: p.city || "",
+      country: p.country || translations.en["country.SG"],
+    };
+  }
+
+  // Read the delivery boxes from a form. "name" = first + last name (shown in the nav bar).
+  function readDetails(form) {
+    const details = {};
+    DETAIL_FIELDS.forEach((name) => (details[name] = form.elements[name].value.trim()));
+    details.name = `${details.firstName} ${details.lastName}`.trim();
+    return details;
+  }
+
   // Shop filter categories → the translation key for their name
   const CATEGORY_KEYS = {
     robots: "products.cat.robots",
@@ -404,9 +446,11 @@
       }
       gate.hidden = true;
       main.hidden = false;
-      // Fill in what we already know about the user (only into empty boxes)
-      if (!form.elements.name.value) form.elements.name.value = S.state.user.displayName || "";
-      if (!form.elements.email.value) form.elements.email.value = S.state.user.email || "";
+      // Fill in what we already know about the user — their saved details (only into empty boxes)
+      const prefill = { ...savedDetails(), email: S.state.user.email || "" };
+      Object.entries(prefill).forEach(([name, value]) => {
+        if (!form.elements[name].value) form.elements[name].value = value;
+      });
       renderSummary();
     }
 
@@ -433,8 +477,8 @@
       return null;
     }
 
-    form.querySelectorAll("input, textarea").forEach((input) =>
-      input.addEventListener("input", () => {
+    form.querySelectorAll(".field input, .field textarea, .field select").forEach((input) =>
+      input.addEventListener(input.tagName === "SELECT" ? "change" : "input", () => {
         if (input.closest(".field").classList.contains("invalid")) setError(input, check(input));
       })
     );
@@ -452,7 +496,7 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       let firstInvalid = null;
-      form.querySelectorAll("input, textarea").forEach((input) => {
+      form.querySelectorAll(".field input, .field textarea, .field select").forEach((input) => {
         const error = check(input);
         setError(input, error);
         if (error && !firstInvalid) firstInvalid = input;
@@ -479,11 +523,8 @@
         uid: user.uid,
         accountEmail: user.email || "",
         customer: {
-          name: value("name"),
-          phone: value("phone"),
+          ...readDetails(form), // first/last name, phone, address lines, postal code, city, country
           email: value("email"),
-          country: value("country"),
-          address: value("address"),
           notes: value("notes"),
         },
         items,
@@ -499,6 +540,10 @@
       try {
         await S.db.collection("orders").doc(orderNumber).set(order);
         submitted = true;
+        // "Save these details to my account" (ticked by default) → filled in automatically next time
+        if (form.elements.saveDetails.checked) {
+          S.saveProfile(readDetails(form)).catch((err) => console.warn("Could not save details:", err));
+        }
         S.clearCart();
         showDone(orderNumber);
       } catch (err) {
@@ -525,6 +570,10 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    const countrySelect = form.querySelector("[data-country-select]");
+    fillCountrySelect(countrySelect);
+    document.addEventListener("cooneo:languagechange", () => fillCountrySelect(countrySelect));
+
     S.whenAuthReady(() => {
       update();
       onChange(update);
@@ -537,7 +586,6 @@
   function initLogin() {
     const next = safeNext(new URLSearchParams(window.location.search).get("next"), "account.html");
     const forms = document.getElementById("auth-forms");
-    const loggedIn = document.getElementById("auth-logged-in");
     const message = document.getElementById("auth-message");
     const loginForm = document.getElementById("login-form");
     const registerForm = document.getElementById("register-form");
@@ -573,6 +621,8 @@
       button.disabled = true;
       try {
         await action();
+        // Let the cart finish saving before leaving the page (but never wait more than 8 seconds)
+        await Promise.race([S.waitForAccount(), new Promise((r) => setTimeout(r, 8000))]);
         window.location.href = next;
       } catch (err) {
         say(S.authErrorKey(err));
@@ -618,22 +668,9 @@
       }
     });
 
-    // Already logged in? Go straight on (if sent here from checkout), otherwise show a short panel
-    function update() {
-      const user = S.state.user;
-      if (user && new URLSearchParams(window.location.search).get("next")) {
-        window.location.href = next;
-        return;
-      }
-      forms.hidden = Boolean(user);
-      loggedIn.hidden = !user;
-      if (user) {
-        document.getElementById("auth-user").textContent = t("auth.loggedInAs").replace("{name}", S.displayName(user));
-      }
-    }
+    // Already logged in? There's nothing to do here — go straight to My Account (or back to checkout)
     S.whenAuthReady(() => {
-      update();
-      document.addEventListener("cooneo:languagechange", update);
+      if (S.state.user) window.location.replace(next);
     });
   }
 
@@ -703,6 +740,36 @@
       renderOrders();
     }
 
+    // "Delivery details" form: saved to the account and filled in automatically at checkout
+    function initDetailsForm() {
+      const detailsForm = document.getElementById("details-form");
+      const msg = document.getElementById("details-msg");
+      const countrySelect = detailsForm.querySelector("[data-country-select]");
+      fillCountrySelect(countrySelect);
+      document.addEventListener("cooneo:languagechange", () => fillCountrySelect(countrySelect));
+      Object.entries(savedDetails()).forEach(([name, value]) => (detailsForm.elements[name].value = value));
+
+      detailsForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = detailsForm.querySelector("button[type=submit]");
+        button.disabled = true;
+        try {
+          await S.saveProfile(readDetails(detailsForm));
+          msg.dataset.msgKey = "account.saved"; // re-translated if the language changes
+          msg.textContent = t("account.saved");
+          msg.hidden = false;
+          document.getElementById("account-name").textContent = S.displayName(S.state.user);
+        } catch (err) {
+          console.warn("Could not save details:", err);
+          S.showToast(t("account.saveError"));
+        } finally {
+          button.disabled = false;
+        }
+      });
+      // Hide the "saved" message again as soon as something is edited
+      detailsForm.addEventListener("input", () => (msg.hidden = true));
+    }
+
     S.whenAuthReady(() => {
       if (!S.firebaseReady) {
         gate.innerHTML = `<div class="empty-state"><p data-msg-key="auth.notConfigured">${esc(t("auth.notConfigured"))}</p></div>`;
@@ -720,6 +787,7 @@
         document.getElementById("account-email").textContent = S.state.user.email || "";
       };
       fillUser();
+      initDetailsForm();
       renderOrders();
       loadOrders(user);
       document.addEventListener("cooneo:languagechange", renderOrders);

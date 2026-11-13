@@ -132,6 +132,7 @@
 
   const state = {
     user: null,       // the logged-in Firebase user, or null for guests
+    profile: {},      // the logged-in user's saved details: name, phone, country, address
     authReady: false, // becomes true once we know whether someone is logged in
     cart: [],
     favs: [],
@@ -155,6 +156,26 @@
     }
   }
 
+  // sessionStorage = like localStorage, but cleared when the browser tab is closed.
+  // Used to remember a logged-in user's cart counts between pages of the same visit.
+  const ACCOUNT_CACHE_KEY = "cooneo-account-cache";
+
+  function readSession(key) {
+    try {
+      return JSON.parse(sessionStorage.getItem(key));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeSession(key, value) {
+    try {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+      /* storage unavailable — ignore */
+    }
+  }
+
   // Drop anything that refers to a product no longer in products.js
   function cleanCart(lines) {
     return lines.filter((line) => line && getProduct(line.productId) && line.qty > 0);
@@ -165,6 +186,7 @@
 
   // Tell the page that the cart / favourites changed so it can redraw
   function notifyChange() {
+    if (state.user) writeSession(ACCOUNT_CACHE_KEY, { uid: state.user.uid, cart: state.cart, favs: state.favs });
     document.dispatchEvent(new CustomEvent("cooneo:storechange"));
   }
 
@@ -293,39 +315,76 @@
     const guestFavs = cleanFavs(readLocal(FAVS_KEY));
     const ref = db.collection("users").doc(user.uid);
 
-    const [cartSnap, favSnap] = await Promise.all([ref.collection("cart").get(), ref.collection("favourites").get()]);
+    const [cartSnap, favSnap, profileSnap] = await Promise.all([ref.collection("cart").get(), ref.collection("favourites").get(), ref.get()]);
+    state.profile = profileSnap.exists ? profileSnap.data() : {};
     const cart = [];
     cartSnap.forEach((doc) => cart.push({ key: doc.id, ...doc.data() }));
     const favs = [];
     favSnap.forEach((doc) => favs.push(doc.id));
 
+    // Only write to Firebase when there is something to save (keeps every page load light)
     const batch = db.batch();
+    let writes = 0;
     guestCart.forEach((guestLine) => {
       const existing = cart.find((l) => l.key === guestLine.key);
       const line = existing || { ...guestLine, qty: 0 };
       line.qty = Math.min(line.qty + guestLine.qty, 99);
       if (!existing) cart.push(line);
       batch.set(ref.collection("cart").doc(line.key), { productId: line.productId, options: line.options, qty: line.qty });
+      writes++;
     });
     guestFavs.forEach((id) => {
       if (!favs.includes(id)) {
         favs.push(id);
         batch.set(ref.collection("favourites").doc(id), { productId: id });
+        writes++;
       }
     });
-    // Keep the profile (name + email) up to date
-    batch.set(ref, { name: displayName(user), email: user.email || "", updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
-    await batch.commit();
+    // Keep the profile (name + email) up to date — once per visit, not on every page
+    // (only save the name if we have one — right after registering it is saved by register() instead)
+    const profileKey = `cooneo-profile-saved-${user.uid}`;
+    if (!readSession(profileKey)) {
+      const profile = { email: user.email || "", updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+      if (user.displayName) profile.name = user.displayName;
+      batch.set(ref, profile, { merge: true });
+      writes++;
+    }
+    if (writes) await batch.commit();
+    writeSession(profileKey, true);
 
     // The guest items now live in the account, so clear the browser copy
-    writeLocal(CART_KEY, []);
-    writeLocal(FAVS_KEY, []);
+    if (guestCart.length || guestFavs.length) {
+      writeLocal(CART_KEY, []);
+      writeLocal(FAVS_KEY, []);
+    }
 
     state.cart = cleanCart(cart);
     state.favs = cleanFavs(favs);
   }
 
+  let accountLoading = false; // true while the logged-in user's cart is being loaded
+
+  // The logged-in user's name, remembered in this browser so the nav can show it instantly
+  const NAME_KEY = "cooneo-user-name";
+  function readRememberedName() {
+    try {
+      return localStorage.getItem(NAME_KEY) || "";
+    } catch (e) {
+      return "";
+    }
+  }
+  function rememberName(name) {
+    try {
+      if (name) localStorage.setItem(NAME_KEY, name);
+      else localStorage.removeItem(NAME_KEY);
+    } catch (e) {
+      /* storage unavailable — ignore */
+    }
+  }
+
   function finishAuthChange() {
+    if (!state.user) rememberName(""); // logged out → forget the name
+    accountLoading = false;
     state.authReady = true;
     renderNav();
     renderDrawer();
@@ -333,14 +392,33 @@
     document.dispatchEvent(new CustomEvent("cooneo:authchange"));
   }
 
-  // Start with whatever is saved in this browser (replaced by the account data once logged in)
-  state.cart = cleanCart(readLocal(CART_KEY));
-  state.favs = cleanFavs(readLocal(FAVS_KEY));
+  // Resolves once a logged-in user's cart and favourites have finished loading/saving.
+  // The login page waits for this before moving on, so nothing is cut off half-way.
+  function waitForAccount() {
+    return new Promise((resolve) => {
+      if (state.authReady && !accountLoading && state.user) return resolve();
+      document.addEventListener("cooneo:authchange", () => resolve(), { once: true });
+    });
+  }
+
+  // Start with whatever is saved in this browser (replaced by the account data once logged in).
+  // If someone was logged in earlier in this visit, start from their saved counts instead.
+  const startCache = firebaseReady && readRememberedName() ? readSession(ACCOUNT_CACHE_KEY) : null;
+  state.cart = cleanCart(startCache ? startCache.cart || [] : readLocal(CART_KEY));
+  state.favs = cleanFavs(startCache ? startCache.favs || [] : readLocal(FAVS_KEY));
 
   if (firebaseReady) {
     auth.onAuthStateChanged(async (user) => {
       state.user = user;
       if (user) {
+        accountLoading = true;
+        // Show the counts saved earlier in this visit straight away, then refresh from Firebase
+        const cached = readSession(ACCOUNT_CACHE_KEY);
+        if (cached && cached.uid === user.uid) {
+          state.cart = cleanCart(cached.cart || []);
+          state.favs = cleanFavs(cached.favs || []);
+          renderNav();
+        }
         try {
           await loadAccountData(user);
         } catch (err) {
@@ -348,6 +426,7 @@
         }
       } else {
         // Logged out (or a guest): use whatever is saved in this browser
+        state.profile = {};
         state.cart = cleanCart(readLocal(CART_KEY));
         state.favs = cleanFavs(readLocal(FAVS_KEY));
       }
@@ -372,6 +451,17 @@
     return cred.user;
   }
 
+  // Save the user's delivery details (name, phone, address, postal code, city, country) to their account: users/{uid}
+  async function saveProfile(details) {
+    await db.collection("users").doc(state.user.uid).set({ ...details, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+    Object.assign(state.profile, details);
+    // If the name changed, update the name shown in the nav too
+    if (details.name && details.name !== state.user.displayName) {
+      await state.user.updateProfile({ displayName: details.name });
+      renderNav();
+    }
+  }
+
   function logIn(email, password) {
     return auth.signInWithEmailAndPassword(email, password);
   }
@@ -385,6 +475,8 @@
   }
 
   async function logOut() {
+    writeSession(ACCOUNT_CACHE_KEY, null); // forget this user's saved counts
+    rememberName("");
     if (auth) await auth.signOut();
     window.location.href = "index.html";
   }
@@ -454,11 +546,16 @@
     navEls.favs.setAttribute("aria-label", `${t("nav.favourites")} (${state.favs.length})`);
     navEls.cart.setAttribute("aria-label", `${t("nav.cart")} (${cartCount()})`);
 
-    if (state.user) {
+    // While Firebase is still checking the login (first moment of each page), show the name
+    // remembered from last time instead of flashing "Login"
+    const name = state.user ? displayName(state.user) : !state.authReady ? readRememberedName() : "";
+    if (state.user) rememberName(name);
+
+    if (name) {
       // Logged in: name + a small menu
       navEls.account.innerHTML = `
         <button class="nav-account" type="button" aria-expanded="false" aria-haspopup="true" aria-label="${escapeHtml(t("nav.accountMenu"))}">
-          ${ICONS.user}<span class="nav-account-name">${escapeHtml(displayName(state.user))}</span>
+          ${ICONS.user}<span class="nav-account-name">${escapeHtml(name)}</span>
         </button>
         <div class="account-menu" hidden>
           <a href="account.html">${escapeHtml(t("nav.account"))}</a>
@@ -701,8 +798,10 @@
     openDrawer,
     showToast,
     whenAuthReady,
+    waitForAccount,
     displayName,
     register,
+    saveProfile,
     logIn,
     logInWithGoogle,
     resetPassword,
