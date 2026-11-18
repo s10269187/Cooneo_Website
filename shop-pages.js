@@ -4,7 +4,7 @@
    Each shop page has <body data-page="..."> and this file
    runs the matching part:
 
-   1. shop        → product grid with filter + sort (shop.html)
+   1. shop        → product grid with category filter (shop.html)
    2. product     → product detail page (product.html?id=...)
    3. cart        → full cart page (cart.html)
    4. favourites  → saved products (favourites.html)
@@ -19,11 +19,74 @@
   const page = document.body.dataset.page;
   const esc = S.escapeHtml;
 
-  // TODO: customer-service WhatsApp number (digits only, with country code, e.g. 6591234567)
-  const CS_WHATSAPP = "XXXXXXXXXX";
+  // Customer-service email (the "Email Customer Service" button after an order)
+  const CS_EMAIL = "cooneo@outlook.com";
+
+  // EmailJS (free account at emailjs.com) sends 2 emails for every order:
+  //   1. to the buyer:   "We got your order! Order No. …"
+  //   2. to the company: "New order …" with the buyer's details (the company address is typed in that template)
+  // TODO: paste the keys from your EmailJS account. While publicKey is empty, no email is sent.
+  // A template ID left empty = that email is not sent.
+  const EMAILJS = {
+    publicKey: "Be0YpLs0tFjPF9-fc", // Account → General → Public Key
+    serviceId: "service_mf1eg26", // Email Services → Service ID (Gmail service)
+    buyerTemplateId: "template_btznw5c", // "Order Received – to Buyer" template
+    companyTemplateId: "template_lglayr4", // "New Order Alert – to Company" template
+  };
+
+  // Product lines as plain text, e.g. "• RoboOX × 1 (Add functions: Tilling)"
+  function itemsText(order, lang) {
+    return order.items
+      .map((item) => {
+        const opts = item.options[lang].map(S.optionText).join(lang === "zh" ? "；" : "; ");
+        return `• ${item.name[lang]} × ${item.qty}${opts ? ` (${opts})` : ""}`;
+      })
+      .join("\n");
+  }
+
+  // Send the order emails (the order is already saved, so a failed email is only logged)
+  function sendOrderEmails(order) {
+    if (!EMAILJS.publicKey || !window.emailjs) return;
+    const c = order.customer;
+    const address = [c.address1, c.address2, `${c.postalCode} ${c.city}`.trim(), c.countryOther || c.country].filter(Boolean).join(", ");
+    const send = (templateId, params) => {
+      if (!templateId) return;
+      emailjs
+        .send(EMAILJS.serviceId, templateId, params, { publicKey: EMAILJS.publicKey })
+        .catch((err) => console.warn("Order email not sent:", err));
+    };
+
+    // 1. Buyer: in the language they used on the website
+    send(EMAILJS.buyerTemplateId, {
+      to_email: c.email,
+      to_name: c.name,
+      order_number: order.orderNumber,
+      subject: t("email.subject").replace("{id}", order.orderNumber),
+      message: t("email.message"),
+      items: itemsText(order, currentLang),
+      subtotal: order.subtotal > 0 ? `¥ ${order.subtotal}` : "",
+      address,
+      orders_link: new URL("account.html#orders", location.href).href,
+      reply_to: CS_EMAIL, // the buyer's reply goes to customer service
+    });
+
+    // 2. Company: always in English + Chinese product names, with everything needed to contact the buyer
+    send(EMAILJS.companyTemplateId, {
+      order_number: order.orderNumber,
+      customer_name: c.name,
+      customer_email: c.email,
+      customer_phone: c.phone,
+      address,
+      notes: c.notes || "-",
+      items: itemsText(order, "en") + "\n\n" + itemsText(order, "zh"),
+      subtotal: order.subtotal > 0 ? `¥ ${order.subtotal}` : "-",
+      language: order.language === "zh" ? "中文" : "English",
+      reply_to: c.email, // pressing Reply answers the buyer directly
+    });
+  }
 
   // Delivery details saved to the account (the same boxes on checkout and My Account)
-  const DETAIL_FIELDS = ["firstName", "lastName", "phone", "address1", "address2", "postalCode", "city", "country"];
+  const DETAIL_FIELDS = ["firstName", "lastName", "phone", "address1", "address2", "postalCode", "city", "country", "countryOther"];
 
   // Countries in the Country dropdown. Names are in script.js ("country.SG" etc.).
   // TODO: add or remove countries here (and add their names in script.js).
@@ -37,6 +100,28 @@
       `<option value="">${esc(t("checkout.chooseCountry"))}</option>` +
       COUNTRIES.map((code) => `<option value="${esc(translations.en["country." + code])}">${esc(t("country." + code))}</option>`).join("");
     select.value = current;
+  }
+
+  // Show the "Please specify your country" box only when "Other" is picked.
+  // It is required only while it is showing.
+  function syncCountryOther(form) {
+    const isOther = form.elements.country.value === translations.en["country.OTHER"];
+    const box = form.querySelector("[data-country-other]");
+    box.hidden = !isOther;
+    form.elements.countryOther.required = isOther;
+    if (!isOther) {
+      box.classList.remove("invalid");
+      box.querySelector(".error").textContent = "";
+    }
+  }
+
+  // Fill the Country dropdown, keep it translated, and switch the "Other" box on/off
+  function setUpCountry(form) {
+    const select = form.elements.country;
+    fillCountrySelect(select);
+    document.addEventListener("cooneo:languagechange", () => fillCountrySelect(select));
+    select.addEventListener("change", () => syncCountryOther(form));
+    syncCountryOther(form);
   }
 
   // The user's saved details, ready to put into a form.
@@ -53,6 +138,7 @@
       postalCode: p.postalCode || "",
       city: p.city || "",
       country: p.country || translations.en["country.SG"],
+      countryOther: p.countryOther || "",
     };
   }
 
@@ -60,6 +146,7 @@
   function readDetails(form) {
     const details = {};
     DETAIL_FIELDS.forEach((name) => (details[name] = form.elements[name].value.trim()));
+    if (details.country !== translations.en["country.OTHER"]) details.countryOther = ""; // only kept for "Other"
     details.name = `${details.firstName} ${details.lastName}`.trim();
     return details;
   }
@@ -83,10 +170,16 @@
     return /^[a-z-]+\.html$/.test(value || "") ? value : fallback;
   }
 
-  // "From ¥ 1,280 ≈ S$ 230.40" (or "Price TBC" when no price is set yet)
+  // "Subtotal ¥ 2,560" row (left out while no prices are set yet)
+  function subtotalRowHtml(amount) {
+    if (!amount) return "";
+    return `<div class="summary-row summary-total"><span>${esc(t("cart.subtotal"))}</span><strong>${S.priceHtml(amount)}</strong></div>`;
+  }
+
+  // "From ¥ 1,280 ≈ S$ 230.40" (nothing when no price is set yet)
   function startingPriceHtml(product) {
     const price = S.startingPrice(product);
-    return price ? esc(t("shop.fromPrice")).replace("{price}", S.priceHtml(price)) : S.priceHtml(0);
+    return price ? `<p class="shop-card-price">${esc(t("shop.fromPrice")).replace("{price}", S.priceHtml(price))}</p>` : "";
   }
 
   // One product card (shop grid and favourites page)
@@ -101,7 +194,7 @@
           <p class="shop-card-cat">${esc(t(CATEGORY_KEYS[product.category]))}</p>
           <h3><a href="${url}">${name}</a></h3>
           <p class="shop-card-tagline">${esc(S.pick(product.tagline))}</p>
-          <p class="shop-card-price">${startingPriceHtml(product)}</p>
+          ${startingPriceHtml(product)}
           ${options.actions || ""}
         </div>
       </article>`;
@@ -113,18 +206,13 @@
   function initShop() {
     const grid = document.getElementById("shop-grid");
     const countEl = document.getElementById("shop-count");
-    const sortSelect = document.getElementById("shop-sort");
     const chips = document.querySelectorAll("[data-category]");
     const params = new URLSearchParams(window.location.search);
     let category = CATEGORY_KEYS[params.get("category")] ? params.get("category") : "all";
 
     function render() {
-      let list = PRODUCTS.filter((p) => category === "all" || p.category === category);
-
-      // Sort by starting price. Products with no price yet ("Price TBC") always go last.
-      const priceOf = (p, empty) => S.startingPrice(p) || empty;
-      if (sortSelect.value === "price-asc") list = list.slice().sort((a, b) => priceOf(a, Infinity) - priceOf(b, Infinity));
-      if (sortSelect.value === "price-desc") list = list.slice().sort((a, b) => priceOf(b, -1) - priceOf(a, -1));
+      // Products are shown in the same order as in products.js
+      const list = PRODUCTS.filter((p) => category === "all" || p.category === category);
 
       grid.innerHTML = list.map((p) => productCardHtml(p)).join("");
       countEl.textContent = t("shop.count").replace("{n}", list.length);
@@ -148,7 +236,6 @@
         }
       })
     );
-    sortSelect.addEventListener("change", render);
     onChange(render);
     render();
   }
@@ -206,6 +293,9 @@
       const price = S.unitPrice(product, readOptions());
       info.querySelector("#pd-price").innerHTML = S.priceHtml(price);
       info.querySelector("#pd-total").innerHTML = S.priceHtml(price * readQty());
+      // No price set yet → hide the price and the Total row
+      info.querySelector("#pd-price").hidden = !price;
+      info.querySelector(".pd-total").hidden = !price;
     }
 
     function optionGroupHtml(group) {
@@ -228,9 +318,31 @@
         </fieldset>`;
     }
 
+    // Fold-out sections ("+" opens, "−" closes). "open" keeps a section open when the page is redrawn.
+    function foldHtml(id, title, content, open) {
+      return `
+        <details class="pd-fold" data-fold="${id}"${open ? " open" : ""}>
+          <summary>${esc(title)}<span class="pd-fold-icon" aria-hidden="true"></span></summary>
+          <div class="pd-fold-body">${content}</div>
+        </details>`;
+    }
+
+    // Description + spec table (same as on the Products page), both folded shut at first
+    function foldsHtml(openFolds) {
+      let html = foldHtml("desc", t("product.description"), `<p class="pd-desc">${esc(S.pick(product.description))}</p>`, openFolds.includes("desc"));
+      if (product.specs) {
+        const rows = product.specs
+          .map((spec) => `<div><dt>${esc(t(spec.label))}</dt><dd>${esc(spec.valueKey ? t(spec.valueKey) : spec.value)}</dd></div>`)
+          .join("");
+        html += foldHtml("specs", t("product.specs"), `<dl class="spec-table">${rows}</dl>`, openFolds.includes("specs"));
+      }
+      return `<div class="pd-folds">${html}</div>`;
+    }
+
     function render() {
       const keepOptions = info.childElementCount ? readOptions() : {};
       const keepQty = info.childElementCount ? readQty() : 1;
+      const openFolds = [...info.querySelectorAll(".pd-fold[open]")].map((fold) => fold.dataset.fold);
       const name = S.pick(product.name);
       document.title = `${name} | COONEO`;
       root.querySelector("[data-crumb-shop]").textContent = t("nav.shop");
@@ -243,9 +355,9 @@
         <p class="pd-tagline">${esc(S.pick(product.tagline))}</p>
         <p class="pd-price" id="pd-price"></p>
         ${S.depositNoticeHtml()}
-        <p class="pd-desc">${esc(S.pick(product.description))}</p>
         <form id="pd-form" novalidate>
           ${product.optionGroups.map(optionGroupHtml).join("")}
+          ${foldsHtml(openFolds)}
           <div class="pd-qty-row">
             <label for="pd-qty">${esc(t("product.quantity"))}</label>
             <div class="qty">
@@ -335,7 +447,7 @@
           <aside class="summary-card">
             <h2 class="h3">${esc(t("cart.summary"))}</h2>
             <div class="summary-row"><span>${esc(t("cart.items").replace("{n}", S.cartCount()))}</span></div>
-            <div class="summary-row summary-total"><span>${esc(t("cart.subtotal"))}</span><strong>${S.priceHtml(S.cartSubtotal())}</strong></div>
+            ${subtotalRowHtml(S.cartSubtotal())}
             ${S.depositNoticeHtml()}
             <a class="btn btn-primary btn-block" href="checkout.html">${esc(t("cart.checkout"))}</a>
             <a class="btn btn-outline btn-block" href="shop.html">${esc(t("cart.continue"))}</a>
@@ -429,7 +541,7 @@
             })
             .join("")}
         </ul>
-        <div class="summary-row summary-total"><span>${esc(t("cart.subtotal"))}</span><strong>${S.priceHtml(S.cartSubtotal())}</strong></div>
+        ${subtotalRowHtml(S.cartSubtotal())}
         ${S.depositNoticeHtml()}
         <a class="link-btn" href="cart.html">${esc(t("checkout.editCart"))}</a>`;
     }
@@ -451,6 +563,7 @@
       Object.entries(prefill).forEach(([name, value]) => {
         if (!form.elements[name].value) form.elements[name].value = value;
       });
+      syncCountryOther(form);
       renderSummary();
     }
 
@@ -544,6 +657,7 @@
         if (form.elements.saveDetails.checked) {
           S.saveProfile(readDetails(form)).catch((err) => console.warn("Could not save details:", err));
         }
+        sendOrderEmails(order);
         S.clearCart();
         showDone(orderNumber);
       } catch (err) {
@@ -561,18 +675,19 @@
       gate.hidden = true;
       done.hidden = false;
       document.getElementById("done-order-id").textContent = orderNumber;
-      const waLink = document.getElementById("done-whatsapp");
-      const setWaLink = () => {
-        waLink.href = `https://wa.me/${CS_WHATSAPP}?text=${encodeURIComponent(t("checkout.waMessage").replace("{id}", orderNumber))}`;
+      // Opens the user's email app with our address, a subject and a message already filled in
+      const emailLink = document.getElementById("done-email");
+      const setEmailLink = () => {
+        const subject = encodeURIComponent(t("checkout.emailSubject").replace("{id}", orderNumber));
+        const body = encodeURIComponent(t("checkout.emailBody").replace("{id}", orderNumber));
+        emailLink.href = `mailto:${CS_EMAIL}?subject=${subject}&body=${body}`;
       };
-      setWaLink();
-      document.addEventListener("cooneo:languagechange", setWaLink);
+      setEmailLink();
+      document.addEventListener("cooneo:languagechange", setEmailLink);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    const countrySelect = form.querySelector("[data-country-select]");
-    fillCountrySelect(countrySelect);
-    document.addEventListener("cooneo:languagechange", () => fillCountrySelect(countrySelect));
+    setUpCountry(form);
 
     S.whenAuthReady(() => {
       update();
@@ -689,6 +804,17 @@
       return text || status;
     }
 
+    // Progress bar: Order received → Price confirmed → Completed (not shown for cancelled orders)
+    const STEPS = ["pending_price_confirmation", "confirmed", "completed"];
+    const STEP_KEYS = ["order.step.received", "order.step.confirmed", "order.step.completed"];
+    function trackerHtml(status) {
+      const reached = STEPS.indexOf(status);
+      if (reached === -1) return "";
+      return `<ol class="order-tracker">${STEP_KEYS.map(
+        (key, i) => `<li class="${i <= reached ? "done" : ""}${i === reached ? " current" : ""}"><span class="dot" aria-hidden="true"></span>${esc(t(key))}</li>`
+      ).join("")}</ol>`;
+    }
+
     function renderOrders() {
       if (orders === null) {
         list.innerHTML = `<p class="muted">${esc(t("account.loading"))}</p>`;
@@ -719,8 +845,9 @@
                 <span class="status-badge status-${esc(order.status)}">${esc(statusText(order.status))}</span>
               </div>
               <p class="muted">${esc(t("order.date"))}: ${esc(date)}</p>
+              ${trackerHtml(order.status)}
               <ul class="order-items">${items}</ul>
-              <div class="summary-row"><span>${esc(t("cart.subtotal"))}</span><strong>${S.priceHtml(order.subtotal || 0)}</strong></div>
+              ${order.subtotal ? `<div class="summary-row"><span>${esc(t("cart.subtotal"))}</span><strong>${S.priceHtml(order.subtotal)}</strong></div>` : ""}
             </article>`;
         })
         .join("");
@@ -738,19 +865,32 @@
         orders = "error";
       }
       renderOrders();
+      // Came from "My Orders" → jump down to the order list once it has loaded
+      if (location.hash === "#orders") document.getElementById("orders").scrollIntoView({ behavior: "smooth" });
     }
 
     // "Delivery details" form: saved to the account and filled in automatically at checkout
     function initDetailsForm() {
       const detailsForm = document.getElementById("details-form");
       const msg = document.getElementById("details-msg");
-      const countrySelect = detailsForm.querySelector("[data-country-select]");
-      fillCountrySelect(countrySelect);
-      document.addEventListener("cooneo:languagechange", () => fillCountrySelect(countrySelect));
+      setUpCountry(detailsForm);
       Object.entries(savedDetails()).forEach(([name, value]) => (detailsForm.elements[name].value = value));
+      syncCountryOther(detailsForm);
 
       detailsForm.addEventListener("submit", async (event) => {
         event.preventDefault();
+        // "Other" picked → the country must be written in
+        const other = detailsForm.elements.countryOther;
+        const otherError = other.required && !other.value.trim();
+        other.closest(".field").classList.toggle("invalid", otherError);
+        const errorEl = other.closest(".field").querySelector(".error");
+        if (otherError) {
+          errorEl.dataset.msgKey = "form.errRequired"; // re-translated if the language changes
+          errorEl.textContent = t("form.errRequired");
+          return other.focus();
+        }
+        delete errorEl.dataset.msgKey;
+        errorEl.textContent = "";
         const button = detailsForm.querySelector("button[type=submit]");
         button.disabled = true;
         try {

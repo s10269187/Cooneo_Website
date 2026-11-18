@@ -23,10 +23,17 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <!-- Don't show the page until everything up to #page-ready (end of the page) is built,
+         so menu icons, products and translations never pop in after the page appears. -->
+    <link rel="expect" href="#page-ready" blocking="render" />
     <!-- Stops English text flashing before script.js switches the page to Chinese.
          If Chinese is the chosen language, the page stays hidden until it has been
          translated (script.js removes "lang-pending"). The 3-second timer is a safety net. -->
     <script>
+      // Only one web address: send visitors from the .firebaseapp.com address to .web.app
+      if (location.hostname === "cooneo-website.firebaseapp.com") {
+        location.replace("https://cooneo-website.web.app" + location.pathname + location.search + location.hash);
+      }
       try {
         var lang = localStorage.getItem("cooneo-lang") ||
           ((navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en");
@@ -36,6 +43,10 @@
           setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 3000);
         }
       } catch (e) {}
+      // Page opened with the smooth page switch → the switch does the rise animation
+      window.addEventListener("pagereveal", function (event) {
+        if (event.viewTransition) document.documentElement.classList.add("vt-nav");
+      });
     </script>
   </head>
   <body>
@@ -481,7 +492,7 @@
             <li><a href="tel:+8675526659715">+86 755 2665 9715</a></li>
           </ul>
         </div>
-        <div>
+        <div>i
           <h4 data-i18n="footer.follow">Follow Us</h4>
           <!-- TODO: TikTok link still to add (replace "#") -->
           <div class="socials">
@@ -511,5 +522,6 @@
     <script src="firebase-config.js"></script>
     <script src="products.js"></script>
     <script src="shop.js"></script>
+    <div id="page-ready" hidden></div> <!-- marks "page fully built" (see rel="expect" in <head>) -->
   </body>
 </html>

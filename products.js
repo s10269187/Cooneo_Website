@@ -7,7 +7,7 @@
    PRICES: all prices are in Chinese Yuan (¥ / CNY) and follow
    the COONEO Taobao store. The store could not be opened when
    this file was made, so every price is 0 and marked "TODO".
-   A price of 0 is shown on the website as "Price TBC".
+   A price of 0 is hidden on the website (no price shown).
    Like on Taobao, the listed price is only a DEPOSIT — customer
    service confirms the final price. No payment happens online.
 
@@ -21,6 +21,8 @@
      images:      ["Assets/Images/...jpg", ...],  ← first one is used on the shop grid
      basePrice:   0,                   ← price in ¥ before options
      specSheet:   "roboox",            ← (optional) PDF in Assets/Docs/spec-sheets/
+     specs:       [{ label: "spec.size", value: "749mm × ..." }],  ← (optional) spec table; labels are keys in script.js
+                                       (use valueKey instead of value when the value needs translating)
      optionGroups: [
        {
          id: "functions",              ← short unique name inside this product
@@ -58,6 +60,14 @@ const PRODUCTS = [
     ],
     basePrice: 0, // TODO: price from Taobao
     specSheet: "roboox",
+    specs: [
+      { label: "spec.size", value: "749mm × 1015.79mm × 590mm" },
+      { label: "spec.speed", value: "2m/s" },
+      { label: "spec.drive", valueKey: "roboox.drive" },
+      { label: "spec.power", valueKey: "roboox.power" },
+      { label: "spec.nav", valueKey: "spec.navValue" },
+      { label: "spec.comms", value: "WiFi / 4G / 5G" },
+    ],
     optionGroups: [
       {
         id: "functions",
@@ -89,6 +99,14 @@ const PRODUCTS = [
     ],
     basePrice: 0, // TODO: price from Taobao
     specSheet: "roboox-mini",
+    specs: [
+      { label: "spec.size", value: "725.14mm × 814.99mm × 618.01mm" },
+      { label: "spec.speed", value: "2m/s" },
+      { label: "spec.drive", valueKey: "mini.drive" },
+      { label: "spec.power", valueKey: "mini.power" },
+      { label: "spec.nav", valueKey: "spec.navValue" },
+      { label: "spec.comms", value: "WiFi / 4G / 5G" },
+    ],
     optionGroups: [
       {
         // TODO: placeholder options (taken from the brochure's compatible modules) — check against Taobao
@@ -123,6 +141,14 @@ const PRODUCTS = [
     ],
     basePrice: 0, // TODO: price from Taobao
     specSheet: "stier",
+    specs: [
+      { label: "spec.size", value: "666.58mm × 650.00mm × 296.02mm" },
+      { label: "spec.weight", value: "30kg" },
+      { label: "spec.payload", value: "50kg" },
+      { label: "spec.slope", value: "30°" },
+      { label: "spec.speed", value: "2m/s" },
+      { label: "spec.power", valueKey: "stier.power" },
+    ],
     optionGroups: [
       {
         // TODO: placeholder options (from the brochure's compatible modules) — check against Taobao
@@ -155,6 +181,14 @@ const PRODUCTS = [
     ],
     basePrice: 0, // TODO: price from Taobao
     specSheet: "bison",
+    specs: [
+      { label: "spec.size", value: "630.00mm × 556.00mm × 240.48mm" },
+      { label: "spec.weight", value: "35kg" },
+      { label: "spec.payload", value: "50kg" },
+      { label: "spec.slope", value: "45°" },
+      { label: "spec.speed", value: "2m/s" },
+      { label: "spec.power", valueKey: "bison.power" },
+    ],
     optionGroups: [
       {
         // TODO: placeholder options (from the brochure's compatible modules) — check against Taobao

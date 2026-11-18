@@ -1330,14 +1330,6 @@ html[lang="zh-CN"] .effectors-img {
   margin-bottom: 32px;
 }
 
-.btn-whatsapp {
-  background: #25d366;
-  color: #0b3d1f;
-}
-.btn-whatsapp:hover {
-  background: #1fbd5a;
-}
-
 .btn-wechat {
   background: var(--primary-light);
   color: var(--primary);
@@ -1609,6 +1601,53 @@ html[lang="zh-CN"] .effectors-img {
   to { transform: scale(1); opacity: 1; }
 }
 
+/* ---------- Page-open animation ----------
+   Every time a page opens, the content (everything below the top menu)
+   slowly rises up and fades in. The menu itself stays still. */
+@keyframes page-rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+
+main {
+  animation: page-rise 0.7s ease-out both;
+}
+
+/* Smooth switch between pages (no white flash): the old page stays on screen until
+   the new one is ready, then fades out while the new page rises in over it.
+   The top menu stays perfectly still. (Chrome, Edge and newer Safari.) */
+@view-transition {
+  navigation: auto;
+}
+
+.site-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(site-header),
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@keyframes page-fade-out {
+  to { opacity: 0; }
+}
+
+::view-transition-old(root) {
+  animation: page-fade-out 0.2s ease-out both;
+}
+
+::view-transition-new(root) {
+  animation: page-rise 0.7s ease-out both;
+}
+
+/* When the switch above is used, it already does the rise — so don't do it twice
+   ("vt-nav" is set by the small script in each page's <head>) */
+.vt-nav main {
+  animation: none;
+}
+
 /* ---------- Scroll fade-in animation ---------- */
 .fade-in {
   opacity: 0;
@@ -1629,6 +1668,8 @@ html[lang="zh-CN"] .effectors-img {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  main { animation: none; }
+  @view-transition { navigation: none; }
   .fade-in { opacity: 1; transform: none; transition: none; }
   .carousel-track { transition: none; }
   .btn:hover, .card:hover, .value:hover { transform: none; }
@@ -1944,10 +1985,6 @@ body.no-scroll {
   color: var(--primary-dark);
 }
 
-.price-tbc {
-  color: var(--muted);
-  font-weight: 600;
-}
 
 .price-sgd {
   font-size: 0.8em;
@@ -2013,6 +2050,20 @@ body.no-scroll {
 .chip[aria-pressed="true"] {
   background: var(--primary-dark);
   border-color: var(--primary-dark);
+  color: #fff;
+}
+
+/* "Taobao Store ↗" link in the shop filter bar (Taobao orange, like on the Products page) */
+.chip-store {
+  background: #ff5000;
+  border-color: #ff5000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.chip-store:hover {
+  background: #e04600;
+  border-color: #e04600;
   color: #fff;
 }
 
@@ -2828,6 +2879,135 @@ body.no-scroll {
 .order-card p {
   margin: 0 0 8px;
   font-size: 0.88rem;
+}
+
+/* Order progress: Order received → Price confirmed → Completed */
+/* Description + Specifications on the shop product page: fold-out rows with a +/− on the right */
+.pd-folds {
+  margin: 4px 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.pd-fold {
+  border-bottom: 1px solid var(--border);
+}
+
+.pd-fold summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none; /* hide the browser's own triangle */
+}
+
+.pd-fold summary::-webkit-details-marker {
+  display: none;
+}
+
+/* the "+" (two lines); the upright line disappears when open, leaving "−" */
+.pd-fold-icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.pd-fold-icon::before,
+.pd-fold-icon::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--primary-dark);
+}
+
+.pd-fold-icon::after {
+  transform: rotate(90deg);
+}
+
+.pd-fold[open] .pd-fold-icon::after {
+  display: none;
+}
+
+/* the fold's bottom line already separates it from Quantity, so no second line */
+.pd-folds + .pd-qty-row {
+  border-top: 0;
+}
+
+.pd-fold-body {
+  padding-bottom: 18px;
+}
+
+.pd-fold-body .pd-desc,
+.pd-fold-body .spec-table {
+  margin: 0;
+}
+
+/* Order progress: Order received → Price confirmed → Completed */
+.order-tracker {
+  display: flex;
+  margin: 14px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.order-tracker li {
+  position: relative;
+  flex: 1;
+  padding-top: 24px;
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* the line joining the dots */
+.order-tracker li::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: -50%;
+  width: 100%;
+  height: 3px;
+  background: var(--border);
+}
+
+.order-tracker li:first-child::before {
+  display: none;
+}
+
+.order-tracker .dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  width: 17px;
+  height: 17px;
+  margin-left: -8.5px;
+  border: 3px solid var(--border);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.order-tracker li.done {
+  color: var(--text);
+}
+
+.order-tracker li.done::before {
+  background: var(--primary);
+}
+
+.order-tracker li.done .dot {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.order-tracker li.current {
+  font-weight: 700;
 }
 
 .order-items {

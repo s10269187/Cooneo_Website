@@ -18,10 +18,17 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <!-- Don't show the page until everything up to #page-ready (end of the page) is built,
+         so menu icons, products and translations never pop in after the page appears. -->
+    <link rel="expect" href="#page-ready" blocking="render" />
     <!-- Stops English text flashing before script.js switches the page to Chinese.
          If Chinese is the chosen language, the page stays hidden until it has been
          translated (script.js removes "lang-pending"). The 3-second timer is a safety net. -->
     <script>
+      // Only one web address: send visitors from the .firebaseapp.com address to .web.app
+      if (location.hostname === "cooneo-website.firebaseapp.com") {
+        location.replace("https://cooneo-website.web.app" + location.pathname + location.search + location.hash);
+      }
       try {
         var lang = localStorage.getItem("cooneo-lang") ||
           ((navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en");
@@ -31,6 +38,10 @@
           setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 3000);
         }
       } catch (e) {}
+      // Page opened with the smooth page switch → the switch does the rise animation
+      window.addEventListener("pagereveal", function (event) {
+        if (event.viewTransition) document.documentElement.classList.add("vt-nav");
+      });
     </script>
   </head>
   <body data-page="checkout">
@@ -43,7 +54,7 @@
         </a>
         <nav class="nav-links" id="nav-links" aria-label="Main navigation">
           <a href="index.html" data-i18n="nav.home">Home</a>
-          <a href="products.html" data-i18n="nav.products">Products</a>
+          <!-- HIDDEN: Products page (remove these comment marks to show it again) <a href="products.html" data-i18n="nav.products">Products</a> -->
           <a href="shop.html" data-i18n="nav.shop">Shop</a>
           <a href="contact.html" data-i18n="nav.contact">Contact Us</a>
         </nav>
@@ -124,6 +135,12 @@
                   <select id="c-country" name="country" data-country-select autocomplete="country-name" required></select>
                   <p class="error" aria-live="polite"></p>
                 </div>
+                <!-- Only shown (and required) when "Other" is picked in the Country dropdown -->
+                <div class="field" data-country-other hidden>
+                  <label for="c-country-other" data-i18n="checkout.countryOther">Please specify your country</label>
+                  <input id="c-country-other" name="countryOther" type="text" autocomplete="country-name" />
+                  <p class="error" aria-live="polite"></p>
+                </div>
                 <div class="field">
                   <label for="c-notes" data-i18n="checkout.notes">Notes (optional)</label>
                   <textarea id="c-notes" name="notes" class="short"></textarea>
@@ -147,17 +164,17 @@
             <p><span data-i18n="order.status">Status</span>: <span class="status-badge" data-i18n="order.status.pending_price_confirmation">Pending price confirmation</span></p>
             <p data-i18n="checkout.doneText">Our customer service will contact you to confirm the final price.</p>
             <div class="direct-buttons">
-              <!-- TODO: the customer-service WhatsApp number is set in shop-pages.js (CS_WHATSAPP) -->
-              <a class="btn btn-whatsapp" id="done-whatsapp" href="#" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 9.5c.3 2.2 2.3 4.2 4.5 4.5l1-1.2 1.8.8-.3 1.6c-3.9.4-7.9-3.6-7.5-7.5l1.6-.3.8 1.8z" fill="currentColor" stroke="none"/></svg>
-                <span data-i18n="checkout.whatsapp">WhatsApp Customer Service</span>
+              <!-- The email address is set in shop-pages.js (CS_EMAIL); the order number is added to the subject -->
+              <a class="btn btn-primary" id="done-email" href="mailto:cooneo@outlook.com">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                <span data-i18n="checkout.emailBtn">Email Customer Service</span>
               </a>
               <button type="button" class="btn btn-wechat" id="wechat-open">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>
                 <span data-i18n="checkout.wechat">WeChat Customer Service</span>
               </button>
             </div>
-            <a class="btn btn-outline" href="account.html" data-i18n="checkout.viewOrders">View My Orders</a>
+            <a class="btn btn-outline" href="account.html#orders" data-i18n="checkout.viewOrders">View My Orders</a>
           </div>
         </div>
       </section>
@@ -174,8 +191,7 @@
           <h4 data-i18n="footer.quickLinks">Quick Links</h4>
           <ul class="footer-links">
             <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-            <li><a href="products.html" data-i18n="nav.products">Products</a></li>
-            <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
+            <!-- HIDDEN: Products page (remove these comment marks to show it again) <li><a href="products.html" data-i18n="nav.products">Products</a></li> -->
             <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact Us</a></li>
             <li><a href="https://cooneo.taobao.com/category.htm?appUid=RAzN8HWJL9nqtshR3xWHbb7UW1up3WTG6UH1UMcNbtbv1MnuzaF&amp;topIds=680913930379&amp;shopSearchKeyword=cooneo&amp;spm=a21n57.1.hoverItem.1" target="_blank" rel="noopener" data-i18n="footer.taobao">Our Taobao Store</a></li>
@@ -242,6 +258,9 @@
     <script src="firebase-config.js"></script>
     <script src="products.js"></script>
     <script src="shop.js"></script>
+    <!-- EmailJS: sends the "We got your order!" email (keys are set in shop-pages.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
     <script src="shop-pages.js"></script>  <!-- draws this page (see data-page on <body>) -->
+    <div id="page-ready" hidden></div> <!-- marks "page fully built" (see rel="expect" in <head>) -->
   </body>
 </html>

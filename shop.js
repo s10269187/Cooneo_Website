@@ -40,9 +40,9 @@
   }
 
   // Price HTML: "¥ 1,280" with a small "≈ S$ 230.40" beside it.
-  // A price of 0 means "not set yet" (see products.js) and shows "Price TBC".
+  // A price of 0 means "not set yet" (see products.js) and shows nothing.
   function priceHtml(amount) {
-    if (!amount) return `<span class="price price-tbc">${escapeHtml(t("price.tbc"))}</span>`;
+    if (!amount) return "";
     const cny = amount.toLocaleString("en-US", { maximumFractionDigits: 2 });
     const sgd = (amount * CNY_TO_SGD).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     return `<span class="price">¥ ${cny}</span> <span class="price-sgd">≈ S$ ${sgd}</span>`;
@@ -559,6 +559,7 @@
         </button>
         <div class="account-menu" hidden>
           <a href="account.html">${escapeHtml(t("nav.account"))}</a>
+          <a href="account.html#orders">${escapeHtml(t("nav.orders"))}</a>
           <a href="favourites.html">${escapeHtml(t("nav.favourites"))}</a>
           <button type="button" data-logout>${escapeHtml(t("nav.logout"))}</button>
         </div>`;
@@ -615,7 +616,7 @@
         <div class="cart-line-info">
           <a class="cart-line-name" href="${url}">${name}</a>
           ${opts ? `<ul class="cart-line-opts">${opts}</ul>` : ""}
-          <p class="cart-line-unit">${priceHtml(price)}${price ? ` <span class="muted">${escapeHtml(t("cart.each"))}</span>` : ""}</p>
+          ${price ? `<p class="cart-line-unit">${priceHtml(price)} <span class="muted">${escapeHtml(t("cart.each"))}</span></p>` : ""}
           <div class="qty qty-sm">
             <button type="button" data-cart-action="dec" data-key="${escapeHtml(line.key)}" aria-label="${escapeHtml(t("product.decrease"))}">−</button>
             <span aria-live="polite">${line.qty}</span>
@@ -661,7 +662,7 @@
     }
     body.innerHTML = `<ul class="cart-lines">${state.cart.map(cartLineHtml).join("")}</ul>`;
     foot.innerHTML = `
-      <div class="summary-row"><span>${escapeHtml(t("cart.subtotal"))}</span><strong>${priceHtml(cartSubtotal())}</strong></div>
+      ${cartSubtotal() ? `<div class="summary-row"><span>${escapeHtml(t("cart.subtotal"))}</span><strong>${priceHtml(cartSubtotal())}</strong></div>` : ""}
       ${depositNoticeHtml()}
       <a class="btn btn-primary btn-block" href="checkout.html">${escapeHtml(t("cart.checkout"))}</a>
       <a class="btn btn-outline btn-block" href="cart.html">${escapeHtml(t("cart.viewCart"))}</a>`;
