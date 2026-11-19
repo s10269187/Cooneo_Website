@@ -3176,6 +3176,118 @@ body.no-scroll {
   }
 }
 
+/* Privacy Policy page (privacy.html): only the chosen language's text is shown */
+html[lang="en"] .policy[data-lang="zh"],
+html[lang="zh-CN"] .policy[data-lang="en"] {
+  display: none;
+}
+
+/* Text on the left, "On this page" + contact box on the right */
+.policy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 64px;
+  align-items: start;
+}
+
+.policy-body {
+  max-width: 760px;
+  line-height: 1.7;
+}
+
+.policy h2 {
+  margin: 36px 0 10px;
+  font-size: 1.2rem;
+  scroll-margin-top: 100px; /* jump links stop below the sticky header */
+}
+
+.policy-side {
+  position: sticky;
+  top: 100px;
+  display: grid;
+  gap: 16px;
+}
+
+.policy-toc,
+.policy-contact {
+  padding: 20px 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--primary-light);
+}
+
+.policy-side-title {
+  margin: 0 0 10px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.policy-toc ol {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.policy-toc li {
+  margin-bottom: 6px;
+}
+
+.policy-toc a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.policy-toc a:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.policy-contact p {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+}
+
+.policy-contact .policy-side-title {
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+/* Tablets and phones: one column, contents box above the text, contact box at the end */
+@media (max-width: 900px) {
+  .policy {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .policy-side {
+    display: contents;
+  }
+
+  .policy-toc {
+    order: -1;
+  }
+}
+
+.policy ul {
+  padding-left: 20px;
+}
+
+.policy li {
+  margin-bottom: 8px;
+}
+
+.policy-body a {
+  color: var(--primary);
+}
+
+/* "Privacy Policy" link in the footer's bottom line */
+.footer-bottom a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* Anything with the "hidden" attribute stays hidden, even if a class gives it display: grid/flex */
 [hidden] {
   display: none !important;

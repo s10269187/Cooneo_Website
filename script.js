@@ -343,6 +343,11 @@ const translations = {
     "footer.follow": "Follow Us",
     "footer.company": "COONEO Innovation Technology (Shenzhen) Co., Ltd.",
     "footer.rights": "All rights reserved.",
+    "footer.privacy": "Privacy Policy",
+    "meta.privacy.title": "Privacy Policy | COONEO",
+    "meta.privacy.description": "How COONEO collects, uses and protects your personal information on this website.",
+    "privacy.eyebrow": "Privacy",
+    "privacy.title": "Privacy Policy",
 
     // ---------- SHOP (online store pages) ----------
     "nav.shop": "Shop",
@@ -802,6 +807,11 @@ const translations = {
     "footer.follow": "关注我们",
     "footer.company": "酷牛创新技术（深圳）有限公司",
     "footer.rights": "版权所有。",
+    "footer.privacy": "隐私政策",
+    "meta.privacy.title": "隐私政策 | 酷牛 COONEO",
+    "meta.privacy.description": "酷牛如何在本网站收集、使用和保护您的个人信息。",
+    "privacy.eyebrow": "隐私",
+    "privacy.title": "隐私政策",
 
     // ---------- 商城（在线商店页面） ----------
     "nav.shop": "商城",
