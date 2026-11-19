@@ -300,6 +300,9 @@
     firebase.initializeApp(firebaseConfig);
     auth = firebase.auth(); // remembers the user across visits by default
     db = firebase.firestore();
+    // Visitor stats (Google Analytics) — only on the live site, so your own
+    // testing on Live Server isn't counted as visits
+    if (firebase.analytics && location.hostname.endsWith(".web.app")) firebase.analytics();
   }
 
   // Name to show in the nav: their name, or the part of the email before "@"

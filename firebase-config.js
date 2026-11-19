@@ -30,4 +30,5 @@ const firebaseConfig = {
   storageBucket: "cooneo-website.firebasestorage.app",
   messagingSenderId: "253229631827",
   appId: "1:253229631827:web:6e9823e178ebc8ca6df9a6",
+  measurementId: "G-NQ40FV0T7V", // Google Analytics (visitor stats)
 };
