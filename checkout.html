@@ -173,6 +173,8 @@
             <h2 data-i18n="checkout.doneTitle">Order request received</h2>
             <p><span data-i18n="order.number">Order No.</span>: <strong id="done-order-id"></strong></p>
             <p><span data-i18n="order.status">Status</span>: <span class="status-badge" data-i18n="order.status.pending_price_confirmation">Pending price confirmation</span></p>
+            <!-- Order emails sometimes land in spam, so tell the buyer where to look -->
+            <p class="done-mail-hint" data-i18n="checkout.spamHint">We've sent a confirmation email to you. Can't find it? Please check your spam or junk folder.</p>
             <p data-i18n="checkout.doneText">Our customer service will contact you to confirm the final price.</p>
             <div class="direct-buttons">
               <!-- The email address is set in shop-pages.js (CS_EMAIL); the order number is added to the subject -->
@@ -240,14 +242,14 @@
          products.js = everything the shop sells (names, options, prices)
          shop.js     = cart, favourites, nav icons and the slide-out cart drawer -->
     <!-- TODO: if customer service uses a different WeChat QR code, change the image below -->
-    <!-- WECHAT POPUP -->
+    <!-- WECHAT POPUP (checkout wording: contacting us about the order) -->
     <div class="modal" id="wechat-modal" hidden>
       <div class="modal-backdrop" data-close-modal></div>
       <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="wechat-title">
         <button type="button" class="modal-close" data-close-modal data-i18n-aria-label="modal.close" aria-label="Close">×</button>
-        <h3 id="wechat-title" data-i18n="modal.title">Scan to follow us on WeChat</h3>
+        <h3 id="wechat-title" data-i18n="modal.contactTitle">Scan to contact us on WeChat</h3>
         <img class="wechat-qr" src="Assets/Images/wechat-qr.png" alt="COONEO WeChat Official Account QR code" data-i18n-alt="modal.qr" width="417" height="421" />
-        <p data-i18n="modal.id">Follow our WeChat Official Account for the latest news.</p>
+        <p data-i18n="modal.contactText">Follow our WeChat Official Account, then send us a message with your order number.</p>
       </div>
     </div>
 

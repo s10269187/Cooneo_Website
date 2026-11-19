@@ -332,6 +332,8 @@ const translations = {
     "modal.title": "Scan to follow us on WeChat",
     "modal.qr": "COONEO WeChat Official Account QR code",
     "modal.id": "Follow our WeChat Official Account for the latest news.",
+    "modal.contactTitle": "Scan to contact us on WeChat",
+    "modal.contactText": "Follow our WeChat Official Account, then send us a message with your order number.",
     "modal.close": "Close",
 
     /* ---------- Footer ---------- */
@@ -440,6 +442,7 @@ const translations = {
     "checkout.loading": "Loading…",
     "checkout.doneTitle": "Order request received",
     "checkout.doneText": "Our customer service will contact you to confirm the final price. You can also contact us now:",
+    "checkout.spamHint": "We've sent a confirmation email to you. Can't find it? Please check your spam or junk folder.",
     "checkout.emailBtn": "Email Customer Service",
     "checkout.wechat": "WeChat Customer Service",
     "checkout.viewOrders": "View My Orders",
@@ -796,6 +799,8 @@ const translations = {
     "modal.title": "扫码关注微信公众号",
     "modal.qr": "酷牛微信公众号二维码",
     "modal.id": "关注我们，了解更多公司最新动态",
+    "modal.contactTitle": "扫码微信联系我们",
+    "modal.contactText": "关注酷牛微信公众号后，发送消息并附上您的订单号即可联系我们。",
     "modal.close": "关闭",
 
     /* ---------- 页脚 ---------- */
@@ -904,6 +909,7 @@ const translations = {
     "checkout.loading": "加载中…",
     "checkout.doneTitle": "订单已提交",
     "checkout.doneText": "客服将与您联系确认最终价格，您也可以现在联系我们：",
+    "checkout.spamHint": "我们已向您发送订单确认邮件。如未收到，请查看垃圾邮件文件夹。",
     "checkout.emailBtn": "邮件联系客服",
     "checkout.wechat": "微信客服",
     "checkout.viewOrders": "查看我的订单",
